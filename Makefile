@@ -68,7 +68,7 @@ fix_style:
 	@$(FIXJSSTYLE) --disable 210,217,220,225 -r src -e node_modules
 	@$(FIXJSSTYLE) --disable 210,217,220,225 -r tests -e node_modules
 
-tests: build tests_pre tests_unit
+tests: build tests_pre tests_unit cyclomatic_complexity
 
 tests_pre:
 	@echo "Preparing tests environment (please wait ...)"
@@ -81,3 +81,7 @@ tests_unit: tests_pre
 	@cd tests; $(NPM) test
 	@echo "Killing local server ..."
 	@kill -9 `cat local.pid`; rm local.pid
+
+cyclomatic_complexity: tests_pre
+	@echo "Calculating cyclomatic complexity"
+	@tests/node_modules/.bin/cr src/
