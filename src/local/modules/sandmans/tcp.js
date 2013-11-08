@@ -10,7 +10,12 @@ var config = require('../../config.default.json'),
     log = require('../../shared_libs/logger')(config.log4js),
     net = require('net');
 
-module.exports = function sandman_tcp(ip, port, payload) {
+module.exports.info = {
+  protocol: 'tcp',
+  description: 'This sandman will wakeup using TCP packets'
+};
+
+module.exports.sandman = function sandman_tcp(ip, port, payload) {
   // TCP Notification Message
   var tcp4Client = net.createConnection({host: ip, port: port},
     function() { //'connect' listener

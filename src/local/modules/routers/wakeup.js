@@ -16,7 +16,8 @@ module.exports.info = {
   description: 'The heart of the system: Used to wakeup devices'
 };
 
-module.exports.router = function router_wakeup(parsedURL, request, response, cb) {
+module.exports.router =
+function router_wakeup(parsedURL, request, response, cb) {
   var wakeup_data = {};
 
   response.setHeader('Content-Type', 'text/plain');

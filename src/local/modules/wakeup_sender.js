@@ -8,13 +8,37 @@
 
 var config = require('../config.default.json'),
     log = require('../shared_libs/logger')(config.log4js),
+    fs = require('fs'),
     sandman_udp = require('./sandmans/udp'),
     sandman_tcp = require('./sandmans/tcp');
 
+// Load wakeup sandmans
+var sandmans = {};
+(function load_sandmans() {
+  log.debug('WU_Sender: Loading sandmans ...');
+  sandmanModules = fs.readdirSync('local/modules/sandmans');
+  sandmanModules.forEach(function(filename) {
+    if (filename.substr(-2) === 'js') {
+      try {
+        var sandman = require('./sandmans/' + filename);
+        if (sandman.info && sandman.info.protocol) {
+          log.debug('WU_Sender::load_sandmans - Loaded sandman ' +
+            filename + ' for protocol: ' + sandman.info.protocol);
+          if (sandman.info.description) {
+            log.debug('WU_Sender::load_sandmans - INFO: ' +
+              sandman.info.protocol + ' = ' + sandman.info.description);
+          }
+          sandmans[sandman.info.protocol] = sandman.sandman;
+        }
+      } catch (e) {
+        log.debug('WU_Sender::load_sandmans - Not valid sandman ' +
+          filename);
+      }
+    }
+  });
+}());
+
 function wakeup_sender() {
-  // Constants
-  this.PROTOCOL_UDPv4 = 'udp';
-  this.PROTOCOL_TCPv4 = 'tcp';
 }
 
 wakeup_sender.prototype = {
@@ -23,15 +47,9 @@ wakeup_sender.prototype = {
       protocol);
     var message = new Buffer('NOTIFY ' + ip + ':' + port);
 
-    switch (protocol) {
-    case this.PROTOCOL_TCPv4:
-      sandman_tcp(ip, port, message);
-      break;
-    case this.PROTOCOL_UDPv4:
-      sandman_udp(ip, port, message);
-      break;
-
-    default:
+    if (sandmans[protocol]) {
+      sandmans[protocol](ip, port, message);
+    } else {
       log.error('Protocol (' + protocol + ') not supported');
     }
   }
