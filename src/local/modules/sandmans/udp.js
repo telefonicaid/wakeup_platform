@@ -24,8 +24,7 @@ module.exports.sandman = function sandman_udp(ip, port, payload) {
     function(err, bytes) {
       if (err) {
         log.info('Error sending UDP Datagram to ' + ip + ':' + port);
-      }
-      else {
+      } else {
         log.info('UDP Datagram sent to ' + ip + ':' + port);
         udp4Client.close();
       }

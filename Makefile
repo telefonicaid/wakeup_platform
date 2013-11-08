@@ -29,7 +29,7 @@ version.info:
 	@$(GIT) describe --all > src/version.info
 	@echo " - Version = " `cat src/version.info`
 
-clean: clean_local
+clean: clean_local clean_tests
 	@echo "Cleaning (global) ..."
 	@rm -f src/version.info
 	@rm -rf output
@@ -38,6 +38,10 @@ clean_local:
 	@echo "Cleaning local server instance ..."
 	@rm -rf src/local/node_modules
 	@rm -rf src/local/shared_libs
+
+clean_tests:
+	@echo "Cleaning tests auxiliar files ..."
+	@rm -rf tests/node_modules
 
 build: version.info build_local
 	@echo "Building (global) ..."
@@ -62,6 +66,12 @@ fix_style:
 	@echo "Fixing code style rules ..."
 	@$(FIXJSSTYLE) -r src -e node_modules
 
-tests:
-	@echo "Executing unit testing ..."
-	@echo " - TO BE DONE !"
+tests: tests_pre tests_unit
+
+tests_pre:
+	@echo "Preparing tests environment (please wait ...)"
+	@cd tests; $(NPM) install > /dev/null 2> /dev/null
+
+tests_unit: tests_pre
+	@echo "Executing unit tests ..."
+	@cd tests; $(NPM) test
