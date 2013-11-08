@@ -6,7 +6,12 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-module.exports = function router_status(parsedURL, request, response) {
+module.exports.info = {
+  virtualpath: 'status',
+  description: 'Used to check server status. Needed by load-balancers'
+};
+
+module.exports.router = function router_status(parsedURL, request, response) {
   // Return status mode to be used by load-balancers
   response.setHeader('Content-Type', 'text/html');
   response.statusCode = 200;

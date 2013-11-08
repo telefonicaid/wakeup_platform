@@ -8,7 +8,34 @@
 
 var config = require('../config.default.json'),
     log = require('../shared_libs/logger')(config.log4js),
+    fs = require('fs'),
     url = require('url');
+
+// Load HTTP routers
+var routers = {};
+(function load_routers() {
+  log.debug('WU_ListenerHTTP: Loading routers ...');
+  routerModules = fs.readdirSync('local/modules/routers');
+  routerModules.forEach(function(filename) {
+    if (filename.substr(-2) === 'js') {
+      try {
+        var router = require('./routers/' + filename);
+        if (router.info && router.info.virtualpath) {
+          log.debug('WU_ListenerHTTP::load_routers - Loaded router ' +
+            filename + ' - on virtualpath: ' + router.info.virtualpath);
+          if (router.info.description) {
+            log.debug('WU_ListenerHTTP::load_routers - INFO: ' +
+              router.info.description);
+          }
+          routers['/' + router.info.virtualpath] = router.router;
+        }
+      } catch(e) {
+        log.debug('WU_ListenerHTTP::load_routers - Not valid router ' +
+          filename);
+      }
+    }
+  });
+}());
 
 function listener_http(ip, port, ssl, callback) {
   if (typeof(callback) != 'function') {
@@ -57,19 +84,20 @@ listener_http.prototype = {
     log.info('New message from ' + request.url);
     var _url = url.parse(request.url);
 
+    // By default -> about page
+    if (_url.pathname === '/') {
+      _url.pathname = '/about';
+    }
+
     // Check router existance
-    try {
-      // By default -> about page
-      if (_url.pathname === '/') {
-        _url.pathname = '/about';
-      }
-      require('./routers' + _url.pathname)(_url, request, response, this.cb);
+    if (routers[_url.pathname]) {
+      routers[_url.pathname](_url, request, response, this.cb);
       log.debug('Yeah!, router found !');
-    } catch (e) {
+    } else {
       response.setHeader('Content-Type', 'text/html');
       response.statusCode = 404;
-      response.write('Not found ' + e.message + '<br>');
-      log.warn('Bad query ' + request.url + ', router not found: ' + e.message);
+      response.write('Not found');
+      log.warn('Bad query ' + request.url + ', router not found');
     }
     return response.end();
   }
