@@ -22,12 +22,20 @@ var routers = {};
         var router = require('./routers/' + filename);
         if (router.info && router.info.virtualpath) {
           log.debug('WU_ListenerHTTP::load_routers - Loaded router ' +
-            filename + ' - on virtualpath: ' + router.info.virtualpath);
+            filename + ' - on virtualpath: /' + router.info.virtualpath);
           if (router.info.description) {
-            log.debug('WU_ListenerHTTP::load_routers - INFO: ' +
-              router.info.description);
+            log.debug('WU_ListenerHTTP::load_routers - INFO: /' +
+              router.info.virtualpath + ' = ' + router.info.description);
           }
           routers['/' + router.info.virtualpath] = router.router;
+          if (Array.isArray(router.info.alias)) {
+            log.debug('WU_ListenerHTTP::load_routers - Loading aliases ...');
+            router.info.alias.forEach(function(alias) {
+              log.debug('WU_ListenerHTTP::load_routers - Alias /' + alias +
+                ' = /' + router.info.virtualpath);
+              routers['/' + alias] = router.router;
+            });
+          }
         }
       } catch(e) {
         log.debug('WU_ListenerHTTP::load_routers - Not valid router ' +
@@ -83,11 +91,6 @@ listener_http.prototype = {
     var msg = '';
     log.info('New message from ' + request.url);
     var _url = url.parse(request.url);
-
-    // By default -> about page
-    if (_url.pathname === '/') {
-      _url.pathname = '/about';
-    }
 
     // Check router existance
     if (routers[_url.pathname]) {

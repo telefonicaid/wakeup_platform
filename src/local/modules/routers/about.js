@@ -8,6 +8,9 @@
 
 module.exports.info = {
   virtualpath: 'about',
+  alias: [
+    ''            // No path => default router
+  ],
   description: 'This module shows the about page to the client'
 };
 
