@@ -66,7 +66,7 @@ fix_style:
 	@echo "Fixing code style rules ..."
 	@$(FIXJSSTYLE) -r src -e node_modules
 
-tests: tests_pre tests_unit
+tests: build tests_pre tests_unit
 
 tests_pre:
 	@echo "Preparing tests environment (please wait ...)"
