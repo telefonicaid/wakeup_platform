@@ -15,13 +15,13 @@ var routers = {};
 vows.describe('HTTP routers tests').addBatch({
   'HTTP routers metadata requirements': {
     'topic': function loadRouters() {
-      var routerModules = fs.readdirSync('../src/local/modules/routers');
+      var routerModules = fs.readdirSync('../../src/local/modules/routers');
       var numberOfRouters = 0;
       for (var i=0; i<routerModules.length; i++) {
         if (routerModules[i].substr(-2) === 'js') {
           try {
             routers[numberOfRouters] =
-              require('../../src/local/modules/routers/' + routerModules[i]);
+              require('../../../src/local/modules/routers/' + routerModules[i]);
             numberOfRouters++;
           } catch (e) {
             console.log('Error - ' + e);
