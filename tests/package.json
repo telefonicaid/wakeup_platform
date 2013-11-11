@@ -22,7 +22,8 @@
     "push"
   ],
   "devDependencies": {
-    "vows": "0.7.x"
+    "vows": "0.7.x",
+    "request": "*"
   },
   "engines": {
     "node": "0.10.x"
@@ -32,6 +33,7 @@
     "url": "http://www.gnu.org/licenses/agpl-3.0.html"
   },
   "scripts": {
-    "test": "./node_modules/.bin/vows local/unit/test_*.js -i --spec"
+    "test": "./node_modules/.bin/vows local/unit/test_*.js -i --spec ; ./node_modules/.bin/vows local/functional/test_*.js -i --spec",
+    "start": "cd ../src/; node run_local.js"
   }
 }

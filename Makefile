@@ -75,5 +75,9 @@ tests_pre:
 	@cd tests; $(NPM) install > /dev/null 2> /dev/null
 
 tests_unit: tests_pre
+	@echo "Launching local server ..."
+	@cd src; $(NODE) run_local.js > /dev/null & echo "$$!" > ../local.pid
 	@echo "Executing unit tests ..."
 	@cd tests; $(NPM) test
+	@echo "Killing local server ..."
+	@kill -9 `cat local.pid`; rm local.pid
