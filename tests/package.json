@@ -23,7 +23,8 @@
   ],
   "devDependencies": {
     "vows": "0.7.x",
-    "request": "*"
+    "request": "*",
+    "complexity-report": "*"
   },
   "engines": {
     "node": "0.10.x"
