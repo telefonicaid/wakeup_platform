@@ -1,0 +1,34 @@
+{
+    "name": "wakeup_local",
+    "version": "0.0.1",
+    "author": "Telefónica I+D. 2013",
+    "description": "WakeUp platform: Local server",
+    "contributors": [
+        {
+            "name": "Fernando Rodriguez Sela",
+            "email": "frsela@tid.es"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/telefonicaid/wakeup_platform"
+    },
+    "bugs": {
+        "url": "https://github.com/telefonicaid/wakeup_platform/issues"
+    },
+    "keywords": [
+        "wakeup",
+        "udp",
+        "push"
+    ],
+    "dependencies": {
+        "log4js": "0.6.x"
+    },
+    "engines": {
+        "node": "0.10.x"
+    },
+    "license": {
+        "type": "GNU Affero General Public License",
+        "url": "http://www.gnu.org/licenses/agpl-3.0.html"
+    }
+}

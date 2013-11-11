@@ -27,3 +27,22 @@ The repository is organized with the following folders:
 ## Standarization
 
 We're also working in the standarization of this protocol. 
+
+## Build
+
+Use:
+
+```
+make dev
+```
+To update libraries and node dependencies on each server
+
+```
+make all
+```
+To also create an output folder with final versions (ready for deployment) of your server.
+
+```
+make clean
+```
+To clean your working sandbox with temporal folders and files
