@@ -38,7 +38,7 @@ vows.describe('Sandman TCP tests').addBatch({
     topic: function init_tcp_mock_server() {
       var self = this;
       serverTimeout = setTimeout(function() {
-        console.log("error");
+        console.log('error');
         self.callback('No response received from server!');
       }, serverTimeoutGracePeriod);
       // Listen on a random PORT
@@ -48,7 +48,7 @@ vows.describe('Sandman TCP tests').addBatch({
       });
     },
 
-    'Server responded (no timeout)': function(err,data) {
+    'Mock server responded (no timeout)': function(err, data) {
       clearTimeout(serverTimeout);
       assert.isNull(err);
     },

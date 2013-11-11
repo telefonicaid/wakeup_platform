@@ -61,10 +61,12 @@ install: build
 check_style:
 	@echo "Checking code style rules ..."
 	@$(GJSLINT) --disable 210,217,220,225 -r src -e node_modules
+	@$(GJSLINT) --disable 210,217,220,225 -r tests -e node_modules
 
 fix_style:
 	@echo "Fixing code style rules ..."
-	@$(FIXJSSTYLE) -r src -e node_modules
+	@$(FIXJSSTYLE) --disable 210,217,220,225 -r src -e node_modules
+	@$(FIXJSSTYLE) --disable 210,217,220,225 -r tests -e node_modules
 
 tests: build tests_pre tests_unit
 

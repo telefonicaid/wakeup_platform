@@ -17,7 +17,7 @@ vows.describe('HTTP routers tests').addBatch({
     'topic': function loadRouters() {
       var routerModules = fs.readdirSync('../../src/local/modules/routers');
       var numberOfRouters = 0;
-      for (var i=0; i<routerModules.length; i++) {
+      for (var i = 0; i < routerModules.length; i++) {
         if (routerModules[i].substr(-2) === 'js') {
           try {
             routers[numberOfRouters] =
@@ -31,25 +31,25 @@ vows.describe('HTTP routers tests').addBatch({
       this.callback(null, numberOfRouters);
     },
     'metadata info exists': function(err, numberOfRouters) {
-      for (var i=0; i<numberOfRouters; i++) {
+      for (var i = 0; i < numberOfRouters; i++) {
         assert.isObject(routers[i].info);
       }
     },
     'metadata info has virtualpath property': function(err, numberOfRouters) {
-      for (var i=0; i<numberOfRouters; i++) {
+      for (var i = 0; i < numberOfRouters; i++) {
         assert.isString(routers[i].info.virtualpath);
       }
     },
     'metadata info has description property': function(err, numberOfRouters) {
-      for (var i=0; i<numberOfRouters; i++) {
+      for (var i = 0; i < numberOfRouters; i++) {
         assert.isString(routers[i].info.description);
       }
     },
     'metadata info has alias property': function(err, numberOfRouters) {
-      for (var i=0; i<numberOfRouters; i++) {
+      for (var i = 0; i < numberOfRouters; i++) {
         if (routers[i].info.alias) {
           assert.isArray(routers[i].info.alias);
-          for (var j=0; j<routers[i].info.alias.length; j++) {
+          for (var j = 0; j < routers[i].info.alias.length; j++) {
             assert.isString(routers[i].info.alias[j]);
           }
         } else {
@@ -59,7 +59,7 @@ vows.describe('HTTP routers tests').addBatch({
       }
     },
     'router has a function exported': function(err, numberOfRouters) {
-      for (var i=0; i<numberOfRouters; i++) {
+      for (var i = 0; i < numberOfRouters; i++) {
         assert.isFunction(routers[i].router);
       }
     }

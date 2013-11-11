@@ -6,24 +6,24 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-var  dgram = require('dgram');
+var dgram = require('dgram');
 
 module.exports = function udp_server_mock(port, callback, ready) {
   var server = dgram.createSocket('udp4');
 
-  server.on('error', function (err) {
+  server.on('error', function(err) {
     console.log('udp_server_mock: server error:\n' + err.stack);
     callback(err.stack);
     server.close();
   });
 
-  server.on('message', function (msg, rinfo) {
+  server.on('message', function(msg, rinfo) {
     console.log('udp_server_mock: server got: ' + msg + ' from ' +
       rinfo.address + ':' + rinfo.port);
     callback(null, msg.toString());
   });
 
-  server.on('listening', function () {
+  server.on('listening', function() {
     var address = server.address();
     console.log('udp_server_mock: server listening ' +
       address.address + ':' + address.port);
@@ -31,7 +31,7 @@ module.exports = function udp_server_mock(port, callback, ready) {
   });
 
   server.bind(port);
-}
+};
 
 process.on('uncaughtException', function(err) {
 console.log('Caught exception: ' + err.stack);

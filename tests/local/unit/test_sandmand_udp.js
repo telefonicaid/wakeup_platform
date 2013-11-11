@@ -49,7 +49,7 @@ vows.describe('Sandman UDP tests').addBatch({
       });
     },
 
-    'Server responded (no timeout)': function(err,data) {
+    'Mock server responded (no timeout)': function(err, data) {
       clearTimeout(serverTimeout);
       assert.isNull(err);
     },
