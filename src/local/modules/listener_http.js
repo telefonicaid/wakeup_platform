@@ -15,7 +15,7 @@ var config = require('../config.default.json'),
 var routers = {};
 (function load_routers() {
   log.debug('WU_ListenerHTTP: Loading routers ...');
-  var routerModules = fs.readdirSync('local/modules/routers');
+  var routerModules = fs.readdirSync('modules/routers');
   routerModules.forEach(function(filename) {
     if (filename.substr(-2) === 'js') {
       try {

@@ -76,7 +76,7 @@ tests_pre:
 
 tests_unit: tests_pre
 	@echo "Launching local server ..."
-	@cd src; $(NODE) run_local.js > /dev/null & echo "$$!" > ../local.pid
+	@cd src/local; node start.js > /dev/null & echo "$$!" > ../../local.pid
 	@echo "Executing unit tests ..."
 	@cd tests; $(NPM) test
 	@echo "Killing local server ..."

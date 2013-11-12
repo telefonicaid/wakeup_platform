@@ -6,7 +6,7 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-local = require('./local/main');
+local = require('./main');
 var server = new local.WU_Local_Server();
 server.start();
 

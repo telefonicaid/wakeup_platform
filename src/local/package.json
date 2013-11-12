@@ -33,6 +33,6 @@
     },
     "scripts": {
         "test": "cd ../../tests/ ; ./node_modules/.bin/vows local/unit/test_*.js -i --spec ; ./node_modules/.bin/vows local/functional/test_*.js -i --spec",
-        "start": "cd .. ; node run_local.js"
+        "start": "node start.js"
     }
 }

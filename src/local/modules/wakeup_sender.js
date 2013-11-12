@@ -16,7 +16,7 @@ var config = require('../config.default.json'),
 var sandmans = {};
 (function load_sandmans() {
   log.debug('WU_Sender: Loading sandmans ...');
-  sandmanModules = fs.readdirSync('local/modules/sandmans');
+  sandmanModules = fs.readdirSync('modules/sandmans');
   sandmanModules.forEach(function(filename) {
     if (filename.substr(-2) === 'js') {
       try {
