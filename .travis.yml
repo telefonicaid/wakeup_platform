@@ -1,0 +1,15 @@
+language: "node_js"
+
+node_js:
+  - "0.10"
+
+install:
+  - make clean
+  - make build
+
+script:
+  - make tests
+
+notifications:
+   email:
+      - frsela@tid.es

@@ -68,7 +68,7 @@ fix_style:
 	@$(FIXJSSTYLE) --disable 210,217,220,225 -r src -e node_modules
 	@$(FIXJSSTYLE) --disable 210,217,220,225 -r tests -e node_modules
 
-tests: build tests_pre tests_unit cyclomatic_complexity
+tests: build tests_pre tests_unit
 
 tests_pre:
 	@echo "Preparing tests environment (please wait ...)"
