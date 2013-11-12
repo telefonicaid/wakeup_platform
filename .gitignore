@@ -2,5 +2,6 @@
 node_modules
 src/local/shared_libs/
 src/global/shared_libs/
-src/version.info
+version.info
+shared_*.js
 output

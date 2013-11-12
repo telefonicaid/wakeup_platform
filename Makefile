@@ -39,13 +39,15 @@ clean_local:
 	@echo "Cleaning local server instance ..."
 	@rm -rf src/local/node_modules
 	@rm -rf src/local/shared_libs
-	@rm -rf src/local/routers/shared*
+	@rm -f src/local/routers/shared*
+	@rm -f src/local/version.info
 
 clean_global:
 	@echo "Cleaning global server instance ..."
 	@rm -rf src/global/node_modules
 	@rm -rf src/global/shared_libs
-	@rm -rf src/global/routers/shared*
+	@rm -f src/global/routers/shared*
+	@rm -f src/global/version.info
 
 clean_tests:
 	@echo "Cleaning tests auxiliar files ..."
@@ -54,19 +56,21 @@ clean_tests:
 build: version.info build_local build_global
 	@echo "Building (global) ..."
 
-build_local:
+build_local: version.info
 	@echo "Building local server instance ..."
 	@cp -rfl src/common/libs src/local/shared_libs
 	@cd src/common/routers/; for r in `ls *js`; do ln -f $$r ../../local/routers/shared_$$r; done;
 	@echo " - Updating dependencies (please, wait ...)"
 	@cd src/local; $(NPM) install > /dev/null 2> /dev/null
+	@ln -f src/version.info src/local/version.info
 
-build_global:
+build_global: version.info
 	@echo "Building global server instance ..."
 	@cp -rfl src/common/libs src/global/shared_libs
 	@cd src/common/routers/; for r in `ls *js`; do ln -f $$r ../../global/routers/shared_$$r; done;
 	@echo " - Updating dependencies (please, wait ...)"
 	@cd src/global; $(NPM) install > /dev/null 2> /dev/null
+	@ln -f src/version.info src/global/version.info
 
 install: build
 	@echo "Putting local server into output directory ..."

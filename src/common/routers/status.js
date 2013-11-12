@@ -16,5 +16,5 @@ module.exports.router = function router_status(parsedURL, request, response) {
   response.setHeader('Content-Type', 'text/html');
   response.statusCode = 200;
   response.write('OK');
-  response.write('<br>status to-be-done');
+  response.write('<br>common status to-be-done');
 };
