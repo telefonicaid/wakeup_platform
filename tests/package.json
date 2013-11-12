@@ -34,7 +34,11 @@
     "url": "http://www.gnu.org/licenses/agpl-3.0.html"
   },
   "scripts": {
-    "test": "./node_modules/.bin/vows local/unit/test_*.js -i --spec ; ./node_modules/.bin/vows local/functional/test_*.js -i --spec",
-    "start": "cd ../src/; ./run_local"
+    "test": "npm run-script test_local ; npm run-script test_global",
+    "test_local": "./node_modules/.bin/vows local/unit/test_*.js -i --spec ; ./node_modules/.bin/vows local/functional/test_*.js -i --spec",
+    "test_global": "./node_modules/.bin/vows global/unit/test_*.js -i --spec ; ./node_modules/.bin/vows global/functional/test_*.js -i --spec",
+    "start": "npm run-script start_local ; npm run-script start_global",
+    "start_local": "cd ../src/; ./run_local &",
+    "start_global": "cd ../src/; ./run_global &"
   }
 }

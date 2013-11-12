@@ -7,50 +7,16 @@
  */
 
 var config = require('../config.default.json'),
-    log = require('../shared_libs/logger')(config.log4js),
-    fs = require('fs'),
+    log = require('./logger')(config.log4js),
     url = require('url');
 
-// Load HTTP routers
-var routers = {};
-(function load_routers() {
-  log.debug('WU_ListenerHTTP: Loading routers ...');
-  var routerModules = fs.readdirSync('modules/routers');
-  routerModules.forEach(function(filename) {
-    if (filename.substr(-2) === 'js') {
-      try {
-        var router = require('./routers/' + filename);
-        if (router.info && router.info.virtualpath) {
-          log.debug('WU_ListenerHTTP::load_routers - Loaded router ' +
-            filename + ' - on virtualpath: /' + router.info.virtualpath);
-          if (router.info.description) {
-            log.debug('WU_ListenerHTTP::load_routers - INFO: /' +
-              router.info.virtualpath + ' = ' + router.info.description);
-          }
-          routers['/' + router.info.virtualpath] = router.router;
-          if (Array.isArray(router.info.alias)) {
-            log.debug('WU_ListenerHTTP::load_routers - Loading aliases ...');
-            router.info.alias.forEach(function(alias) {
-              log.debug('WU_ListenerHTTP::load_routers - Alias /' + alias +
-                ' = /' + router.info.virtualpath);
-              routers['/' + alias] = router.router;
-            });
-          }
-        }
-      } catch (e) {
-        log.debug('WU_ListenerHTTP::load_routers - Not valid router ' +
-          filename);
-      }
-    }
-  });
-}());
-
-function listener_http(ip, port, ssl, callback) {
+function listener_http(ip, port, ssl, routers, callback) {
   if (typeof(callback) != 'function') {
     callback = function() {
       log.fatal('WU_ListenerHTTP: No wakeup callback method defined !');
     };
   }
+  this.routers = routers;
   this.ip = ip;
   this.port = port;
   this.ssl = ssl;
@@ -93,8 +59,8 @@ listener_http.prototype = {
     var _url = url.parse(request.url);
 
     // Check router existance
-    if (routers[_url.pathname]) {
-      routers[_url.pathname](_url, request, response, this.cb);
+    if (this.routers[_url.pathname]) {
+      this.routers[_url.pathname](_url, request, response, this.cb);
       log.debug('Yeah!, router found !');
     } else {
       response.setHeader('Content-Type', 'text/html');

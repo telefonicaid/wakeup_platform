@@ -1,5 +1,6 @@
 *.log
 node_modules
 src/local/shared_libs/
+src/global/shared_libs/
 src/version.info
 output

@@ -29,34 +29,53 @@ version.info:
 	@$(GIT) describe --all > src/version.info
 	@echo " - Version = " `cat src/version.info`
 
-clean: clean_local clean_tests
+clean: clean_local clean_global clean_tests
 	@echo "Cleaning (global) ..."
 	@rm -f src/version.info
 	@rm -rf output
+	@find . -name "*log" -exec rm -f {} \;
 
 clean_local:
 	@echo "Cleaning local server instance ..."
 	@rm -rf src/local/node_modules
 	@rm -rf src/local/shared_libs
+	@rm -rf src/local/routers/shared*
+
+clean_global:
+	@echo "Cleaning global server instance ..."
+	@rm -rf src/global/node_modules
+	@rm -rf src/global/shared_libs
+	@rm -rf src/global/routers/shared*
 
 clean_tests:
 	@echo "Cleaning tests auxiliar files ..."
 	@rm -rf tests/node_modules
 
-build: version.info build_local
+build: version.info build_local build_global
 	@echo "Building (global) ..."
 
 build_local:
 	@echo "Building local server instance ..."
-	@cp -rfl src/libs src/local/shared_libs
+	@cp -rfl src/common/libs src/local/shared_libs
+	@cd src/common/routers/; for r in `ls *js`; do ln -f $$r ../../local/routers/shared_$$r; done;
 	@echo " - Updating dependencies (please, wait ...)"
 	@cd src/local; $(NPM) install > /dev/null 2> /dev/null
+
+build_global:
+	@echo "Building global server instance ..."
+	@cp -rfl src/common/libs src/global/shared_libs
+	@cd src/common/routers/; for r in `ls *js`; do ln -f $$r ../../global/routers/shared_$$r; done;
+	@echo " - Updating dependencies (please, wait ...)"
+	@cd src/global; $(NPM) install > /dev/null 2> /dev/null
 
 install: build
 	@echo "Putting local server into output directory ..."
 	@mkdir -p output/local
 	@cp -rfl src/local output/
+	@mkdir -p output/global
+	@cp -rfl src/global output/
 	@find output -name README.md -exec rm {} \;
+	@cp -rfl src/run_* output/
 
 check_style:
 	@echo "Checking code style rules ..."
@@ -68,19 +87,27 @@ fix_style:
 	@$(FIXJSSTYLE) --disable 210,217,220,225 -r src -e node_modules
 	@$(FIXJSSTYLE) --disable 210,217,220,225 -r tests -e node_modules
 
-tests: build tests_pre tests_unit
+tests: build tests_pre tests_local tests_global
 
 tests_pre:
 	@echo "Preparing tests environment (please wait ...)"
 	@cd tests; $(NPM) install > /dev/null 2> /dev/null
 
-tests_unit: tests_pre
+tests_local: tests_pre
 	@echo "Launching local server ..."
 	@cd src/local; node start.js > /dev/null & echo "$$!" > ../../local.pid
 	@echo "Executing unit tests ..."
-	@cd tests; $(NPM) test
+	@cd tests; $(NPM) run-script test_local
 	@echo "Killing local server ..."
 	@kill -9 `cat local.pid`; rm local.pid
+
+tests_global: tests_pre
+	@echo "Launching global server ..."
+	@cd src/global; node start.js > /dev/null & echo "$$!" > ../../global.pid
+	@echo "Executing unit tests ..."
+	@cd tests; $(NPM) run-script test_global
+	@echo "Killing global server ..."
+	@kill -9 `cat global.pid`; rm global.pid
 
 cyclomatic_complexity: tests_pre
 	@echo "Calculating cyclomatic complexity"

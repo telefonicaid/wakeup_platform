@@ -10,15 +10,14 @@ var config = require('./config.default.json'),
     log = require('./shared_libs/logger')(config.log4js),
     routers_loader = require('./shared_libs/load_routers');
     listener_http = require('./shared_libs/listener_http').listener_http;
-    wakeup_sender = require('./modules/wakeup_sender');
 
-function WU_Local_Server() {
+function WU_Global_Server() {
   this.http_listeners = [];
 }
 
-WU_Local_Server.prototype = {
+WU_Global_Server.prototype = {
   onWakeUpCommand: function(data) {
-    wakeup_sender.wakeup(data.ip, data.port, data.protocol);
+    log.error('TO BE DONE ' + JSON.stringify(data));
   },
 
   start: function() {
@@ -34,23 +33,23 @@ WU_Local_Server.prototype = {
       this.http_listeners[a].init();
     }
 
-    log.info('WakeUp local server starting');
+    log.info('WakeUp global server starting');
   },
 
   stop: function() {
-    log.info('WakeUp local server stopping');
+    log.info('WakeUp global server stopping');
 
     this.http_listeners.forEach(function(server) {
       server.stop();
     });
 
-    log.info('WakeUp local server waiting 10 secs for all servers stops ...');
+    log.info('WakeUp global server waiting 10 secs for all servers stops ...');
     setTimeout(function() {
-      log.info('WakeUp local server - Bye !');
+      log.info('WakeUp global server - Bye !');
       process.exit(0);
     }, 10000);
   }
 };
 
-exports.WU_Local_Server = WU_Local_Server;
+exports.WU_Global_Server = WU_Global_Server;
 
