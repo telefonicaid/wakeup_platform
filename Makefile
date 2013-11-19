@@ -29,6 +29,11 @@ version.info:
 	@$(GIT) describe --all > src/version.info
 	@echo " - Version = " `cat src/version.info`
 
+provision_data:
+	@echo "Provisioning operators data on REDIS database ..."
+	@cd src/utils; ./wakeup_provisionnetworks
+	@echo "Done!"
+
 clean: clean_local clean_global clean_tests
 	@echo "Cleaning (global) ..."
 	@rm -f src/version.info
