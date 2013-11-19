@@ -84,7 +84,7 @@ install: build
 check_style:
 	@echo "Checking code style rules ..."
 	@$(GJSLINT) --disable 210,217,220,225 -r src -e node_modules
-	@$(GJSLINT) --disable 210,217,220,225 -r tests -e node_modules
+	@$(GJSLINT) --disable 210,217,220,225 -r tests -e node_modules -x pre_tests.js,post_tests.js
 
 fix_style:
 	@echo "Fixing code style rules ..."
@@ -92,6 +92,8 @@ fix_style:
 	@$(FIXJSSTYLE) --disable 210,217,220,225 -r tests -e node_modules
 
 tests: build tests_pre tests_local tests_global
+	@echo "Executing common unit tests ..."
+	@cd tests; $(NPM) run-script test_libs
 
 tests_pre:
 	@echo "Preparing tests environment (please wait ...)"

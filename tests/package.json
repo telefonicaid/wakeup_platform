@@ -24,7 +24,9 @@
   "devDependencies": {
     "vows": "0.7.x",
     "request": "*",
-    "complexity-report": "*"
+    "complexity-report": "*",
+    "async": "*",
+    "redis": "0.9.x"
   },
   "engines": {
     "node": "0.10.x"
@@ -34,7 +36,8 @@
     "url": "http://www.gnu.org/licenses/agpl-3.0.html"
   },
   "scripts": {
-    "test": "npm run-script test_local ; npm run-script test_global",
+    "test": "npm run-script test_libs ; npm run-script test_local ; npm run-script test_global",
+    "test_libs": "./libs/unit/pre_tests.js ; ./node_modules/.bin/vows libs/unit/test_*.js -i --spec ; ./libs/unit/post_tests.js",
     "test_local": "./node_modules/.bin/vows local/unit/test_*.js -i --spec ; ./node_modules/.bin/vows local/functional/test_*.js -i --spec",
     "test_global": "./node_modules/.bin/vows global/unit/test_*.js -i --spec ; ./node_modules/.bin/vows global/functional/test_*.js -i --spec",
     "start": "npm run-script start_local ; npm run-script start_global",
