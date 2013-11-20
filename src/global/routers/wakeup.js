@@ -12,12 +12,12 @@ var config = require('../config.default.json'),
     net = require('net');
 
 module.exports.info = {
-  virtualpath: 'wakeup',
-  description: 'The heart of the system: Used to wakeup devices'
+  virtualpath: 'wakeup/v1',
+  description: 'The heart of the system: Used to wakeup devices (V1)'
 };
 
 module.exports.router =
-function router_wakeup(parsedURL, request, response, cb) {
+function router_wakeupV1(parsedURL, request, response, cb) {
   var wakeup_data = {};
 
   response.setHeader('Content-Type', 'text/plain');
@@ -30,11 +30,6 @@ function router_wakeup(parsedURL, request, response, cb) {
     return;
   }
   wakeup_data = querystring.parse(parsedURL.query);
-  if (wakeup_data.proto) {
-    wakeup_data.protocol = wakeup_data.proto;
-  } else {
-    wakeup_data.protocol = 'udp';
-  }
 
   // Check parameters
   if (!net.isIP(wakeup_data.ip) ||     // Is a valid IP address
@@ -48,16 +43,20 @@ function router_wakeup(parsedURL, request, response, cb) {
   }
 
   // Check protocol
-  if (wakeup_data.protocol !== 'udp' && wakeup_data.protocol !== 'tcp') {
-    log.debug('WU_ListenerHTTP_WakeUpRouter --> Bad Protocol');
+  if ((!wakeup_data.netid || typeof(wakeup_data.netid) !== 'string') &&
+       (!wakeup_data.mcc || !wakeup_data.mnc ||
+        isNaN(wakeup_data.mcc) || isNaN(wakeup_data.mnc))) {
+    log.debug('WU_ListenerHTTP_WakeUpRouter --> Bad NetID OR MCC/MNC');
     response.statusCode = 404;
-    response.write('Bad parameters. Bad Protocol');
+    response.write('Bad parameters. Bad NetID OR MCC/MNC');
     return;
   }
 
   // All Ok, we can wakeup the device !
   log.debug('WU_ListenerHTTP_WakeUpRouter --> WakeUp IP = ' + wakeup_data.ip +
-    ':' + wakeup_data.port + ' through (' + wakeup_data.protocol + ')');
+    ':' + wakeup_data.port +
+    ' network (' + wakeup_data.mcc + '-' + wakeup_data.mnc + ' | ' +
+      wakeup_data.netid + ')');
 
   response.statusCode = 200;
   response.write('Accepted');

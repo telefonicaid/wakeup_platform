@@ -60,8 +60,8 @@ listener_http.prototype = {
 
     // Check router existance
     if (this.routers[_url.pathname]) {
-      this.routers[_url.pathname](_url, request, response, this.cb);
       log.debug('Yeah!, router found !');
+      this.routers[_url.pathname](_url, request, response, this.cb);
     } else {
       response.setHeader('Content-Type', 'text/html');
       response.statusCode = 404;

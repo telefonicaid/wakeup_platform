@@ -22,7 +22,9 @@
     ],
     "dependencies": {
         "log4js": "0.6.x",
-        "redis": "0.9.x"
+        "redis": "0.9.x",
+        "request": "*",
+        "range_check": "*"
     },
     "engines": {
         "node": "0.10.x"

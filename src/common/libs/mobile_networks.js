@@ -6,7 +6,8 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-var redis = require('redis');
+var redis = require('redis'),
+    range_check = require('range_check');
 
 module.exports = (function mobile_networks() {
   var client = redis.createClient();
@@ -95,6 +96,32 @@ module.exports = (function mobile_networks() {
       }
 
       getOperator(operator.mcc, operator.mnc, callback);
+    },
+
+    // Checks if the deviceip is in a valid range for the specified network
+    checkNetwork: function(netid, deviceip, callback) {
+      if (typeof(callback) != 'function') {
+        callback = function() {};
+      }
+
+      if (!range_check.valid_ip(deviceip)) {
+        return callback('No valid device IP');
+      }
+
+      this.getNetwork(netid, function(error, data) {
+        if (error) {
+          return callback(error);
+        }
+        if (!data) {
+          return callback('No network found');
+        }
+        // Client IP is out of the mobile network
+        if (!range_check.in_range(deviceip, data.range)) {
+          return callback('Client IP (' + deviceip +
+            ') is out of the mobile network range - ' + data.range);
+        }
+        callback(null, data);
+      });
     }
   };
 })();
