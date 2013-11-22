@@ -6,7 +6,8 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-var mn = require('../../../src/common/libs/mobile_networks'),
+require('./configuration.js');
+var mn = require('../../../src/global/shared_libs/mobile_networks'),
     assert = require('assert'),
     vows = require('vows');
 

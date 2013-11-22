@@ -6,15 +6,18 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-var redis = require('redis'),
+var config = process.configuration,
+    redis = require('redis'),
     range_check = require('range_check');
 
 module.exports = (function mobile_networks() {
-  var client = redis.createClient();
+  var client = redis.createClient(config.redis.port, config.redis.host,
+    config.redis.options);
   init();
 
   function init() {
-    var client_cache = redis.createClient();
+    var client_cache = redis.createClient(config.redis.port, config.redis.host,
+      config.redis.options);
     client_cache.on('message', function onMessage(channel, message) {
       if (channel === 'networks_changed') {
         clearCache();

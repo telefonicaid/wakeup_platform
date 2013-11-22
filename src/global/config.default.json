@@ -20,5 +20,11 @@
   "ssl": {
     "key": "",
     "cert": ""
+  },
+  "redis": {
+    "host": "localhost",
+    "port": 6379,
+    "options": {
+    }
   }
 }
