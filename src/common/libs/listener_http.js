@@ -6,8 +6,8 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-var config = process.configuration;
-var log = require('./logger')(config.log4js),
+var config = process.configuration,
+    log = require('./logger'),
     url = require('url');
 
 function ListenerHttp(ip, port, ssl, routers, callback) {

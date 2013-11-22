@@ -6,8 +6,7 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-var config = process.configuration;
-var log = require('../shared_libs/logger')(config.log4js),
+var log = require('../shared_libs/logger'),
     querystring = require('querystring'),
     net = require('net');
 

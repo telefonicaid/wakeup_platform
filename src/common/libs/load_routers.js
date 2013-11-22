@@ -6,8 +6,7 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-var config = process.configuration;
-var log = require('./logger')(config.log4js),
+var log = require('./logger'),
     fs = require('fs');
 
 // Load HTTP routers

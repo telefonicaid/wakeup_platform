@@ -6,10 +6,13 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-var log4js = require('log4js');
+var log4js = require('log4js'),
+    config = process.configuration.log4js;
 
-module.exports = function getLogger(config) {
+function getLogger() {
   config.replaceConsole = true;
   log4js.configure(config);
   return log4js.getLogger(config.appenders[0].category);
-};
+}
+
+module.exports = getLogger();

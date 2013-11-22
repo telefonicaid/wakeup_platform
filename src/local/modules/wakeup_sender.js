@@ -6,8 +6,7 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-var config = process.configuration,
-    log = require('../shared_libs/logger')(config.log4js),
+var log = require('../shared_libs/logger'),
     fs = require('fs'),
     sandman_udp = require('./sandmans/udp'),
     sandman_tcp = require('./sandmans/tcp');

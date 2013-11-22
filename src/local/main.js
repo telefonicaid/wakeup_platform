@@ -9,7 +9,7 @@
 var config = require('./config.default.json');
 process.configuration = config;
 
-var log = require('./shared_libs/logger')(config.log4js),
+var log = require('./shared_libs/logger'),
     routers_loader = require('./shared_libs/load_routers');
     ListenerHttp = require('./shared_libs/listener_http').ListenerHttp;
     wakeup_sender = require('./modules/wakeup_sender');
