@@ -1,2 +1,2 @@
 cd global
-node start.js
+node start.js $1

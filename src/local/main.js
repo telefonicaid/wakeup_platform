@@ -6,10 +6,8 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-var config = require('./config.default.json');
-process.configuration = config;
-
-var log = require('./shared_libs/logger'),
+var config = require('./shared_libs/configuration'),
+    log = require('./shared_libs/logger'),
     plugins_loader = require('./shared_libs/plugins_loader');
     ListenerHttp = require('./shared_libs/listener_http').ListenerHttp;
     wakeup_sender = require('./modules/wakeup_sender');

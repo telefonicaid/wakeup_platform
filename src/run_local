@@ -1,2 +1,2 @@
 cd local
-node start.js
+node start.js $1 
