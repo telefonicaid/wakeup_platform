@@ -6,8 +6,7 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-var config = require('../../config.default.json'),
-    log = require('../../shared_libs/logger')(config.log4js),
+var log = require('../../shared_libs/logger'),
     net = require('net');
 
 module.exports.info = {

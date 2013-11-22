@@ -7,15 +7,14 @@
  */
 
 module.exports.info = {
-  virtualpath: 'about',
-  alias: [
-    ''            // No path => default router
-  ],
-  description: 'This module shows the about page to the client'
+  virtualpath: 'status',
+  description: 'Used to check server status. Needed by load-balancers'
 };
 
-module.exports.router = function router_about(parsedURL, request, response) {
+module.exports.router = function router_status(parsedURL, request, response) {
+  // Return status mode to be used by load-balancers
   response.setHeader('Content-Type', 'text/html');
   response.statusCode = 200;
-  response.write('about to-be-done');
+  response.write('OK');
+  response.write('<br>common status to-be-done');
 };

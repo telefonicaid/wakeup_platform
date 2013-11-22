@@ -6,6 +6,7 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
+require('./configuration.js');
 var sandman_udp = require('../../../src/local/modules/sandmans/udp.js'),
     mock_udpserver = require('../mocks/udp_server_mock'),
     buffer = require('buffer'),

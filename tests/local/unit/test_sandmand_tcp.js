@@ -6,6 +6,7 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
+require('./configuration.js');
 var sandman_tcp = require('../../../src/local/modules/sandmans/tcp.js'),
     mock_tcpserver = require('../mocks/tcp_server_mock'),
     assert = require('assert'),

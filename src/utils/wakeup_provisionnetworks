@@ -1,0 +1,3 @@
+cd mccmnc_provisioner
+awk -f load_operators_onredis.awk mcc-mnc-2013.csv
+cd -

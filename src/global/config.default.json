@@ -1,0 +1,30 @@
+{
+  "log4js": {
+    "appenders": [
+      {
+        "type": "file",
+        "filename": "NS_WakeUp.log",
+        "category": "WakeUp_Global"
+      },
+      { "type": "console" }
+    ],
+    "level": "ALL"
+  },
+  "interfaces": [
+    {
+      "ip": "0.0.0.0",
+      "port": 8000,
+      "ssl": false
+    }
+  ],
+  "ssl": {
+    "key": "",
+    "cert": ""
+  },
+  "redis": {
+    "host": "localhost",
+    "port": 6379,
+    "options": {
+    }
+  }
+}

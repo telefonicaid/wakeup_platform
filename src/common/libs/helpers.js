@@ -6,10 +6,11 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-var log4js = require('log4js');
+'use strict';
 
-module.exports = function getLogger(config) {
-  config.replaceConsole = true;
-  log4js.configure(config);
-  return log4js.getLogger(config.appenders[0].category);
+module.exports.checkCallback = function checkCallback(callback) {
+  if (typeof(callback) != 'function') {
+    callback = function() {};
+  }
+  return callback;
 };

@@ -1,0 +1,40 @@
+{
+    "name": "wakeup_global",
+    "version": "0.0.1",
+    "author": "Telefónica I+D. 2013",
+    "description": "WakeUp platform: Global server",
+    "contributors": [
+        {
+            "name": "Fernando Rodriguez Sela",
+            "email": "frsela@tid.es"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/telefonicaid/wakeup_platform"
+    },
+    "bugs": {
+        "url": "https://github.com/telefonicaid/wakeup_platform/issues"
+    },
+    "keywords": [
+        "wakeup",
+        "push"
+    ],
+    "dependencies": {
+        "log4js": "0.6.x",
+        "redis": "0.9.x",
+        "request": "2.27.x",
+        "range_check": "0.0.x"
+    },
+    "engines": {
+        "node": "0.10.x"
+    },
+    "license": {
+        "type": "GNU Affero General Public License",
+        "url": "http://www.gnu.org/licenses/agpl-3.0.html"
+    },
+    "scripts": {
+        "test": "cd ../../tests/ ; ./node_modules/.bin/vows global/unit/test_*.js -i --spec ; ./node_modules/.bin/vows global/functional/test_*.js -i --spec",
+        "start": "node start.js"
+    }
+}
