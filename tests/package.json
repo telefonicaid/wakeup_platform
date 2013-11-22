@@ -23,9 +23,9 @@
   ],
   "devDependencies": {
     "vows": "0.7.x",
-    "request": "*",
-    "complexity-report": "*",
-    "async": "*",
+    "request": "2.27.x",
+    "complexity-report": "1.0.x",
+    "async": "0.2.x",
     "redis": "0.9.x"
   },
   "engines": {

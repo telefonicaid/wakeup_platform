@@ -6,8 +6,11 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
+'use strict';
+
 var config = process.configuration,
     redis = require('redis'),
+    helpers = require('./helpers'),
     range_check = require('range_check');
 
 module.exports = (function mobile_networks() {
@@ -62,25 +65,25 @@ module.exports = (function mobile_networks() {
   function getNetworkByMCCMNC(mcc, mnc, callback) {
     getOperator(mcc, mnc, function(e, data) {
       if (e) {
-        return callback(e);
+        callback(e);
+        return;
       }
       if (data.defaultNetwork) {
         getNetworkByNetID(data.defaultNetwork, callback);
       } else {
-        callback(e);
+        callback('Mobile Network without wakeup host');
       }
     });
   }
 
   return {
     getNetwork: function(netid, callback) {
-      if (typeof(callback) != 'function') {
-        callback = function() {};
-      }
+      callback = helpers.checkCallback(callback);
 
       if (typeof(netid) === 'object') {
         if (!netid.mcc || !netid.mnc) {
-          return callback('No valid netid object');
+          callback('No valid netid object');
+          return;
         }
         getNetworkByMCCMNC(netid.mcc, netid.mnc, callback);
       } else {
@@ -95,7 +98,8 @@ module.exports = (function mobile_networks() {
 
       if (typeof(operator) !== 'object' ||
           !operator.mcc || !operator.mnc) {
-          return callback('No valid operator object');
+        callback('No valid operator object');
+        return;
       }
 
       getOperator(operator.mcc, operator.mnc, callback);
@@ -108,20 +112,20 @@ module.exports = (function mobile_networks() {
       }
 
       if (!range_check.valid_ip(deviceip)) {
-        return callback('No valid device IP');
+        callback('No valid device IP');
+        return;
       }
 
       this.getNetwork(netid, function(error, data) {
-        if (error) {
-          return callback(error);
-        }
-        if (!data) {
-          return callback('No network found');
+        if (error || !data) {
+          callback(error || 'No network found');
+          return;
         }
         // Client IP is out of the mobile network
         if (!range_check.in_range(deviceip, data.range)) {
-          return callback('Client IP (' + deviceip +
+          callback('Client IP (' + deviceip +
             ') is out of the mobile network range - ' + data.range);
+          return;
         }
         callback(null, data);
       });

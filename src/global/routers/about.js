@@ -30,6 +30,6 @@ module.exports.router = function router_about(parsedURL, request, response) {
   else
     version = '(No version.info file !)';
   response.write('<h2>Global node ' + version.toString() + '</h2>');
-  response.write('&copy; Telefónica Digital, 2013<br />');
+  response.write('© Telefónica Digital, 2013<br />');
   response.write('</body></html>');
 };
