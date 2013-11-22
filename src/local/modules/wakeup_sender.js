@@ -8,34 +8,10 @@
 
 var log = require('../shared_libs/logger'),
     fs = require('fs'),
-    sandman_udp = require('./sandmans/udp'),
-    sandman_tcp = require('./sandmans/tcp');
+    plugins_loader = require('../shared_libs/plugins_loader');
 
-// Load wakeup sandmans
-var sandmans = {};
-(function load_sandmans() {
-  log.debug('WU_Sender: Loading sandmans ...');
-  sandmanModules = fs.readdirSync('modules/sandmans');
-  sandmanModules.forEach(function(filename) {
-    if (filename.substr(-2) === 'js') {
-      try {
-        var sandman = require('./sandmans/' + filename);
-        if (sandman.info && sandman.info.protocol) {
-          log.debug('WU_Sender::load_sandmans - Loaded sandman ' +
-            filename + ' for protocol: ' + sandman.info.protocol);
-          if (sandman.info.description) {
-            log.debug('WU_Sender::load_sandmans - INFO: ' +
-              sandman.info.protocol + ' = ' + sandman.info.description);
-          }
-          sandmans[sandman.info.protocol] = sandman.sandman;
-        }
-      } catch (e) {
-        log.debug('WU_Sender::load_sandmans - Not valid sandman ' +
-          filename);
-      }
-    }
-  });
-}());
+plugins_loader.load('modules/sandmans');
+var sandmans = plugins_loader.getSandmans();
 
 function wakeup_sender() {
 }

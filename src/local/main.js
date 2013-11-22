@@ -10,7 +10,7 @@ var config = require('./config.default.json');
 process.configuration = config;
 
 var log = require('./shared_libs/logger'),
-    routers_loader = require('./shared_libs/load_routers');
+    plugins_loader = require('./shared_libs/plugins_loader');
     ListenerHttp = require('./shared_libs/listener_http').ListenerHttp;
     wakeup_sender = require('./modules/wakeup_sender');
 
@@ -25,13 +25,13 @@ WU_Local_Server.prototype = {
 
   start: function() {
     // Start servers
-    var routers = routers_loader('routers');
+    plugins_loader.load('routers');
     for (var a in config.interfaces) {
       this.http_listeners[a] = new ListenerHttp(
         config.interfaces[a].ip,
         config.interfaces[a].port,
         config.interfaces[a].ssl,
-        routers,
+        plugins_loader.getRouters(),
         this.onWakeUpCommand);
       this.http_listeners[a].init();
     }

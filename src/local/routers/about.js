@@ -9,6 +9,8 @@
 var fs = require('fs');
 
 module.exports.info = {
+  name: 'aboutRouter',
+  type: 'router',
   virtualpath: 'about',
   alias: [
     ''            // No path => default router
@@ -16,20 +18,20 @@ module.exports.info = {
   description: 'This module shows the about page to the client'
 };
 
-module.exports.router = function router_about(parsedURL, request, response) {
-  response.setHeader('Content-Type', 'text/html;charset=UTF-8');
-  response.statusCode = 200;
-  response.write('<html><head>');
-  response.write(
+module.exports.entrypoint = function router_about(parsedURL, req, res) {
+  res.setHeader('Content-Type', 'text/html;charset=UTF-8');
+  res.statusCode = 200;
+  res.write('<html><head>');
+  res.write(
     '<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">');
-  response.write('</head><body>');
-  response.write('<h1>WakeUp mobile platform</h1>');
+  res.write('</head><body>');
+  res.write('<h1>WakeUp mobile platform</h1>');
   var version = '';
   if (fs.existsSync('version.info'))
     version = 'v.' + fs.readFileSync('version.info');
   else
     version = '(No version.info file !)';
-  response.write('<h2>Local node ' + version.toString() + '</h2>');
-  response.write('© Telefónica Digital, 2013<br />');
-  response.write('</body></html>');
+  res.write('<h2>Local node ' + version.toString() + '</h2>');
+  res.write('© Telefónica Digital, 2013<br />');
+  res.write('</body></html>');
 };

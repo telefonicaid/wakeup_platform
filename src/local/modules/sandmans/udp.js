@@ -10,11 +10,13 @@ var log = require('../../shared_libs/logger'),
     dgram = require('dgram');
 
 module.exports.info = {
+  name: 'UDPSandman',
+  type: 'sandman',
   protocol: 'udp',
   description: 'This sandman will wakeup using UDP datagrams'
 };
 
-module.exports.sandman = function sandman_udp(ip, port, payload) {
+module.exports.entrypoint = function sandman_udp(ip, port, payload) {
   // UDP Notification Message
   var udp4Client = dgram.createSocket('udp4');
   udp4Client.send(

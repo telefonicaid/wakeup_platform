@@ -7,14 +7,16 @@
  */
 
 module.exports.info = {
+  name: 'statusRouter',
+  type: 'router',
   virtualpath: 'status',
   description: 'Used to check server status. Needed by load-balancers'
 };
 
-module.exports.router = function router_status(parsedURL, request, response) {
+module.exports.entrypoint = function router_status(parsedURL, req, res) {
   // Return status mode to be used by load-balancers
-  response.setHeader('Content-Type', 'text/html');
-  response.statusCode = 200;
-  response.write('OK');
-  response.write('<br>common status to-be-done');
+  res.setHeader('Content-Type', 'text/html');
+  res.statusCode = 200;
+  res.write('OK');
+  res.write('<br>common status to-be-done');
 };

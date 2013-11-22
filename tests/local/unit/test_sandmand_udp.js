@@ -22,14 +22,20 @@ vows.describe('Sandman UDP tests').addBatch({
     'metadata info exists': function() {
       assert.isObject(sandman_udp.info);
     },
+    'metadata info has a name defined': function() {
+      assert.isString(sandman_udp.info.name);
+    },
+    'metadata info has a plugin type defined': function() {
+      assert.isString(sandman_udp.info.type);
+    },
     'metadata info has protocol defined': function() {
       assert.isString(sandman_udp.info.protocol);
     },
     'metadata info has description defined': function() {
       assert.isString(sandman_udp.info.description);
     },
-    'sandman has a "sandman" function': function() {
-      assert.isFunction(sandman_udp.sandman);
+    'sandman has an entrypoint function': function() {
+      assert.isFunction(sandman_udp.entrypoint);
     },
     'declared protocol is UDP': function() {
       assert.equal(sandman_udp.info.protocol, 'udp');
@@ -46,7 +52,7 @@ vows.describe('Sandman UDP tests').addBatch({
       // Listen on a random PORT
       mock_udpserver(0, this.callback, function onMockServerStarted(port) {
         // Send some payload using Sandman
-        sandman_udp.sandman('127.0.0.1', port, testPayload);
+        sandman_udp.entrypoint('127.0.0.1', port, testPayload);
       });
     },
 

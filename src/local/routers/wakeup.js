@@ -11,11 +11,13 @@ var log = require('../shared_libs/logger'),
     net = require('net');
 
 module.exports.info = {
+  name: 'wakeupRouter',
+  type: 'router',
   virtualpath: 'wakeup',
   description: 'The heart of the system: Used to wakeup devices'
 };
 
-module.exports.router =
+module.exports.entrypoint =
 function router_wakeup(parsedURL, request, response, cb) {
   var wakeup_data = {};
 

@@ -27,8 +27,8 @@ vows.describe('Sandman TCP tests').addBatch({
     'metadata info has description defined': function() {
       assert.isString(sandman_tcp.info.description);
     },
-    'sandman has a "sandman" function': function() {
-      assert.isFunction(sandman_tcp.sandman);
+    'sandman has an entrypoint function': function() {
+      assert.isFunction(sandman_tcp.entrypoint);
     },
     'declared protocol is TCP': function() {
       assert.equal(sandman_tcp.info.protocol, 'tcp');
@@ -45,7 +45,7 @@ vows.describe('Sandman TCP tests').addBatch({
       // Listen on a random PORT
       mock_tcpserver(0, this.callback, function onMockServerStarted(port) {
         // Send some payload using Sandman
-        sandman_tcp.sandman('127.0.0.1', port, testPayload);
+        sandman_tcp.entrypoint('127.0.0.1', port, testPayload);
       });
     },
 

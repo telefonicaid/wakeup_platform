@@ -35,6 +35,16 @@ vows.describe('HTTP routers tests').addBatch({
         assert.isObject(routers[i].info);
       }
     },
+    'metadata info has a name property': function(err, numberOfRouters) {
+      for (var i = 0; i < numberOfRouters; i++) {
+        assert.isString(routers[i].info.name);
+      }
+    },
+    'metadata info has a plugin type property': function(err, numberOfRouters) {
+      for (var i = 0; i < numberOfRouters; i++) {
+        assert.isString(routers[i].info.type);
+      }
+    },
     'metadata info has virtualpath property': function(err, numberOfRouters) {
       for (var i = 0; i < numberOfRouters; i++) {
         assert.isString(routers[i].info.virtualpath);
@@ -58,9 +68,9 @@ vows.describe('HTTP routers tests').addBatch({
         }
       }
     },
-    'router has a function exported': function(err, numberOfRouters) {
+    'router has an entrypoint exported': function(err, numberOfRouters) {
       for (var i = 0; i < numberOfRouters; i++) {
-        assert.isFunction(routers[i].router);
+        assert.isFunction(routers[i].entrypoint);
       }
     }
 
