@@ -32,11 +32,12 @@ WU_Global_Server.prototype = {
         URL += '&proto=' + wakeupdata.proto;
       }
       log.info('Sending wakeup query to: ' + URL);
-      request(URL, function(error, resp) {
+      request(URL, function(error, resp, body) {
         if (error) {
           log.error('Local node connection error: ' + error);
         }
-        log.info('Notification delivered to local node !');
+        log.info('Notification delivered to local node ! - Response: (' +
+          resp.statusCode + ') # ' + body);
       });
     }
 
