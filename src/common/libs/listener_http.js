@@ -10,7 +10,7 @@ var config = process.configuration;
 var log = require('./logger')(config.log4js),
     url = require('url');
 
-function listener_http(ip, port, ssl, routers, callback) {
+function ListenerHttp(ip, port, ssl, routers, callback) {
   if (typeof(callback) != 'function') {
     callback = function() {
       log.fatal('WU_ListenerHTTP: No wakeup callback method defined !');
@@ -23,11 +23,11 @@ function listener_http(ip, port, ssl, routers, callback) {
   this.cb = callback;
 }
 
-listener_http.prototype = {
+ListenerHttp.prototype = {
   init: function() {
-    log.info('Starting WakeUp listener_http');
+    log.info('Starting WakeUp ListenerHttp');
 
-    // Create a new HTTP(S) listener_http
+    // Create a new HTTP(S) ListenerHttp
     if (this.ssl) {
       var options = {
         ca: helpers.getCaChannel(),
@@ -41,7 +41,7 @@ listener_http.prototype = {
     }
     this.server.listen(this.port, this.ip);
     log.info('WU_ListenerHTTP::init --> HTTP' + (this.ssl ? 'S' : '') +
-             ' WakeUp listener_http starting on ' + this.ip + ':' + this.port);
+             ' WakeUp ListenerHttp starting on ' + this.ip + ':' + this.port);
   },
 
   stop: function() {
@@ -73,4 +73,4 @@ listener_http.prototype = {
 };
 
 // Exports
-exports.listener_http = listener_http;
+exports.ListenerHttp = ListenerHttp;

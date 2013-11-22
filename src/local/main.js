@@ -11,7 +11,7 @@ process.configuration = config;
 
 var log = require('./shared_libs/logger')(config.log4js),
     routers_loader = require('./shared_libs/load_routers');
-    listener_http = require('./shared_libs/listener_http').listener_http;
+    ListenerHttp = require('./shared_libs/listener_http').ListenerHttp;
     wakeup_sender = require('./modules/wakeup_sender');
 
 function WU_Local_Server() {
@@ -27,7 +27,7 @@ WU_Local_Server.prototype = {
     // Start servers
     var routers = routers_loader('routers');
     for (var a in config.interfaces) {
-      this.http_listeners[a] = new listener_http(
+      this.http_listeners[a] = new ListenerHttp(
         config.interfaces[a].ip,
         config.interfaces[a].port,
         config.interfaces[a].ssl,

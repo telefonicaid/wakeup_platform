@@ -13,7 +13,7 @@ var log = require('./shared_libs/logger')(config.log4js),
     routers_loader = require('./shared_libs/load_routers'),
     mn = require('./shared_libs/mobile_networks'),
     request = require('request');
-    listener_http = require('./shared_libs/listener_http').listener_http;
+    ListenerHttp = require('./shared_libs/listener_http').ListenerHttp;
 
 function WU_Global_Server() {
   this.http_listeners = [];
@@ -52,7 +52,7 @@ WU_Global_Server.prototype = {
     // Start servers
     var routers = routers_loader('routers');
     for (var a in config.interfaces) {
-      this.http_listeners[a] = new listener_http(
+      this.http_listeners[a] = new ListenerHttp(
         config.interfaces[a].ip,
         config.interfaces[a].port,
         config.interfaces[a].ssl,
