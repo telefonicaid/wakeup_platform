@@ -9,7 +9,29 @@
 require('./configuration.js');
 var mn = require('../../../src/global/shared_libs/mobile_networks'),
     assert = require('assert'),
-    vows = require('vows');
+    vows = require('vows'),
+    net = require('net');
+
+function checkRanges(range) {
+  function checkNetwork(network) {
+    try {
+      var aux = network.split('/');
+    } catch (e) {
+      assert.isFalse(true);
+      return;
+    }
+    assert.isNumber(net.isIP(aux[0]));
+    assert.isNumber(parseInt(aux[1]));
+  }
+  if (typeof(range) !== 'string') {
+    assert.isArray(range);
+    for (a = 0; a < range.length; a++) {
+      checkNetwork(range[a]);
+    }
+  } else {
+    checkNetwork(range);
+  }
+}
 
 vows.describe('Mobile Networks tests (bad payload)').addBatch({
   'Getting invalid operator': {
@@ -105,7 +127,7 @@ vows.describe('Mobile Networks tests (bad payload)').addBatch({
       assert.isString(data.host);
     },
     'Network has a defined range': function(err, data) {
-      assert.isString(data.range);
+      checkRanges(data.range);
     },
     'Network has a parent network id': function(err, data) {
       assert.isString(data.network);
@@ -123,10 +145,55 @@ vows.describe('Mobile Networks tests (bad payload)').addBatch({
       assert.isString(data.host);
     },
     'Network has a defined range': function(err, data) {
-      assert.isString(data.range);
+      checkRanges(data.range);
     },
     'Network has a parent network id': function(err, data) {
       assert.isString(data.network);
+    }
+  },
+
+  'Check Network IP range (in Range 1)': {
+    topic: function() {
+      mn.checkNetwork('network1-1-1', '10.1.2.3', this.callback);
+    },
+    'No error returned': function(err, data) {
+      assert.isNull(err);
+    },
+    'Network has a host': function(err, data) {
+      assert.isString(data.host);
+    },
+    'Network has a defined range': function(err, data) {
+      checkRanges(data.range);
+    },
+    'Network has a parent network id': function(err, data) {
+      assert.isString(data.network);
+    }
+  },
+
+  'Check Network IP range (in Range 2)': {
+    topic: function() {
+      mn.checkNetwork('network1-1-1', '192.168.1.3', this.callback);
+    },
+    'No error returned': function(err, data) {
+      assert.isNull(err);
+    },
+    'Network has a host': function(err, data) {
+      assert.isString(data.host);
+    },
+    'Network has a defined range': function(err, data) {
+      checkRanges(data.range);
+    },
+    'Network has a parent network id': function(err, data) {
+      assert.isString(data.network);
+    }
+  },
+
+  'Check Network IP range (Out of range)': {
+    topic: function() {
+      mn.checkNetwork('network1-1-1', '192.168.2.10', this.callback);
+    },
+    'Error returned': function(err, data) {
+      assert.isNotNull(data);
     }
   }
 }).export(module);
