@@ -6,6 +6,7 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
+var fs = require('fs');
 var configFile = null;
 
 if (process.env.WAKEUP_CONFIG) {
@@ -20,5 +21,12 @@ if (!configFile) {
 
 console.log(configFile);
 process.configuration = require(configFile);
+
+if (fs.existsSync('version.info')) {
+  process.configuration._version = 'v.' +
+    fs.readFileSync('version.info').toString();
+} else {
+  process.configuration._version = '(No version.info file !)';
+}
 
 module.exports = process.configuration;

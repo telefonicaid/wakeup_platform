@@ -6,8 +6,6 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-var fs = require('fs');
-
 module.exports.info = {
   name: 'aboutRouter',
   type: 'router',
@@ -26,12 +24,7 @@ module.exports.entrypoint = function router_about(parsedURL, req, res) {
     '<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">');
   res.write('</head><body>');
   res.write('<h1>WakeUp mobile platform</h1>');
-  var version = '';
-  if (fs.existsSync('version.info'))
-    version = 'v.' + fs.readFileSync('version.info');
-  else
-    version = '(No version.info file !)';
-  res.write('<h2>Local node ' + version.toString() + '</h2>');
+  res.write('<h2>Local node ' + process.configuration._version + '</h2>');
   res.write('© Telefónica Digital, 2013<br />');
   res.write('</body></html>');
 };
