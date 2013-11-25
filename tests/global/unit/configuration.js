@@ -6,13 +6,4 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-var assert = require('assert'),
-    vows = require('vows');
-
-vows.describe('DUMMY').addBatch({
-  'dummy': {
-    'dummy': function() {
-      assert.isTrue(true);
-    }
-  }
-}).export(module);
+process.configuration = require('../../../src/global/config.default.json');

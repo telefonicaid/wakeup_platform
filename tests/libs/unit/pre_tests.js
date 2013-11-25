@@ -39,7 +39,8 @@ function loadTestData(callback) {
     },
     function(cb) {
       client.hset('networks', 'network1-1-1',
-        '{ "host": "http://10.1.1.1:9000", "range": "10.0.0.0/8",' +
+        '{ "host": "http://10.1.1.1:9000",' +
+        ' "range": ["10.0.0.0/8","192.168.1.0/24"],' +
         ' "network": "001-01" }', cb);
     },
     function(cb) {
