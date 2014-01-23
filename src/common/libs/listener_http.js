@@ -61,14 +61,22 @@ ListenerHttp.prototype = {
     // Check router existance
     if (this.routers[_url.pathname]) {
       log.debug('Yeah!, router found !');
-      this.routers[_url.pathname](_url, request, response, this.cb);
+      var body = '',
+          self = this;
+      request.on('data', function(data) {
+        body += data;
+      });
+      request.on('end', function() {
+        self.routers[_url.pathname](_url, body, request, response, self.cb);
+        response.end();
+      });
     } else {
       response.setHeader('Content-Type', 'text/html');
       response.statusCode = 404;
       response.write('Not found');
       log.warn('Bad query ' + request.url + ', router not found');
+      response.end();
     }
-    return response.end();
   }
 };
 

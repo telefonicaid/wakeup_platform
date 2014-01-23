@@ -16,7 +16,7 @@ module.exports.info = {
   description: 'This module shows the about page to the client'
 };
 
-module.exports.entrypoint = function router_about(parsedURL, req, res) {
+module.exports.entrypoint = function router_about(parsedURL, body, req, res) {
   res.setHeader('Content-Type', 'text/html;charset=UTF-8');
   res.statusCode = 200;
   res.write('<html><head>');

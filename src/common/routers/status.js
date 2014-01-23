@@ -13,7 +13,7 @@ module.exports.info = {
   description: 'Used to check server status. Needed by load-balancers'
 };
 
-module.exports.entrypoint = function router_status(parsedURL, req, res) {
+module.exports.entrypoint = function router_status(parsedURL, body, req, res) {
   // Return status mode to be used by load-balancers
   res.setHeader('Content-Type', 'text/html');
   res.statusCode = 200;

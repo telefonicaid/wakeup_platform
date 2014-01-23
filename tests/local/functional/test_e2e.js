@@ -16,7 +16,7 @@ var serverTimeout = null;
 var serverTimeoutGracePeriod = 30000;
 
 vows.describe('Local node E2E tests').addBatch({
-  'TCP wakeup package': {
+  'TCP wakeup package (GET)': {
     topic: function init_tcp_mock_server() {
       var self = this;
       serverTimeout = setTimeout(function() {
@@ -41,7 +41,7 @@ vows.describe('Local node E2E tests').addBatch({
     }
   },
 
-  'UDP wakeup package': {
+  'UDP wakeup package (GET)': {
     topic: function init_udp_mock_server() {
       var self = this;
       serverTimeout = setTimeout(function() {
@@ -63,5 +63,76 @@ vows.describe('Local node E2E tests').addBatch({
       assert.isString(data);
       assert.equal(data.substr(0, 6), 'NOTIFY');
     }
+  },
+
+  'TCP wakeup package (POST)': {
+    topic: function init_tcp_mock_server() {
+      var self = this;
+      serverTimeout = setTimeout(function() {
+        console.log('error');
+        self.callback('No response received from server!');
+      }, serverTimeoutGracePeriod);
+      // Listen on a random PORT
+      mock_tcpserver(0, this.callback, function onMockServerStarted(port) {
+        var body = 'proto=tcp&ip=127.0.0.1&port=' + port;
+        var url = 'http://localhost:9000/wakeup';
+        request.post(url, { body: body }, function(error, response, body) {
+          if (error) {
+            self.callback(error.toString());
+            return;
+          }
+          if (response.statusCode !== 200) {
+            self.callback('Bad statusCode=' + response.statusCode);
+            return;
+          }
+        });
+      });
+    },
+
+    'Mock server responded (no timeout)': function(err, data) {
+      clearTimeout(serverTimeout);
+      assert.isNull(err);
+    },
+
+    'Received data has the expected format': function(err, data) {
+      assert.isString(data);
+      assert.equal(data.substr(0, 6), 'NOTIFY');
+    }
+  },
+
+  'UDP wakeup package (POST)': {
+    topic: function init_udp_mock_server() {
+      var self = this;
+      serverTimeout = setTimeout(function() {
+        console.log('error');
+        self.callback('No response received from server!');
+      }, serverTimeoutGracePeriod);
+      // Listen on a random PORT
+      mock_udpserver(0, this.callback, function onMockServerStarted(port) {
+        var body = 'ip=127.0.0.1&port=' + port;
+        var url = 'http://localhost:9000/wakeup';
+        request.post(url, { body: body }, function(error, response, body) {
+          if (error) {
+            self.callback(error.toString());
+            return;
+          }
+          if (response.statusCode !== 200) {
+            self.callback('Bad statusCode=' + response.statusCode);
+            return;
+          }
+        });
+      });
+    },
+
+    'Mock server responded (no timeout)': function(err, data) {
+      clearTimeout(serverTimeout);
+      assert.isNull(err);
+    },
+
+    'Received data has the expected format': function(err, data) {
+      assert.isString(data);
+      assert.equal(data.substr(0, 6), 'NOTIFY');
+    }
   }
+
 }).export(module);

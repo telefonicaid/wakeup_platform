@@ -17,20 +17,17 @@ module.exports.info = {
   description: 'The heart of the system: Used to wakeup devices'
 };
 
-module.exports.entrypoint =
-function router_wakeup(parsedURL, request, response, cb) {
-  var wakeup_data = {};
-
+function processWakeUpQuery(paramsString, request, response, cb) {
   response.setHeader('Content-Type', 'text/plain');
 
   // Check request ...
-  if (!parsedURL.query) {
+  if (!paramsString) {
     log.debug('WU_ListenerHTTP_WakeUpRouter --> No required data provided');
-    response.statusCode = 404;
+    response.statusCode = 400;
     response.write('Bad parameters. No required data provided');
     return;
   }
-  wakeup_data = querystring.parse(parsedURL.query);
+  var wakeup_data = querystring.parse(paramsString);
   if (wakeup_data.proto) {
     wakeup_data.protocol = wakeup_data.proto;
   } else {
@@ -43,7 +40,7 @@ function router_wakeup(parsedURL, request, response, cb) {
       wakeup_data.port <= 0 || wakeup_data.port > 65535 // Port in a valid range
   ) {
     log.debug('WU_ListenerHTTP_WakeUpRouter --> Bad IP/Port');
-    response.statusCode = 404;
+    response.statusCode = 400;
     response.write('Bad parameters. Bad IP/Port');
     return;
   }
@@ -51,7 +48,7 @@ function router_wakeup(parsedURL, request, response, cb) {
   // Check protocol
   if (wakeup_data.protocol !== 'udp' && wakeup_data.protocol !== 'tcp') {
     log.debug('WU_ListenerHTTP_WakeUpRouter --> Bad Protocol');
-    response.statusCode = 404;
+    response.statusCode = 400;
     response.write('Bad parameters. Bad Protocol');
     return;
   }
@@ -65,4 +62,22 @@ function router_wakeup(parsedURL, request, response, cb) {
   process.nextTick(function() {
     cb(wakeup_data);
   });
-};
+}
+
+module.exports.entrypoint =
+  function router_wakeup(parsedURL, body, request, response, cb) {
+    switch (request.method) {
+    case 'GET':
+      processWakeUpQuery(parsedURL.query, request, response, cb);
+      break;
+    case 'POST':
+      processWakeUpQuery(body, request, response, cb);
+      break;
+    default:
+      response.setHeader('Content-Type', 'text/plain');
+      response.statusCode = 405;
+      response.write('Bad method. Only GET and POST is allowed');
+      log.debug('WU_ListenerHTTP_WakeUpRouter --> Bad method - ' +
+        request.method);
+    }
+  };

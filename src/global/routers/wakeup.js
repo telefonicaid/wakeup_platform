@@ -17,20 +17,17 @@ module.exports.info = {
   description: 'The heart of the system: Used to wakeup devices (V1)'
 };
 
-module.exports.entrypoint =
-function router_wakeupV1(parsedURL, request, response, cb) {
-  var wakeup_data = {};
-
+function processWakeUpQuery(paramsString, request, response, cb) {
   response.setHeader('Content-Type', 'text/plain');
 
   // Check request ...
-  if (!parsedURL.query) {
+  if (!paramsString) {
     log.debug('WU_ListenerHTTP_WakeUpRouter --> No required data provided');
-    response.statusCode = 404;
+    response.statusCode = 400;
     response.write('Bad parameters. No required data provided');
     return;
   }
-  wakeup_data = querystring.parse(parsedURL.query);
+  var wakeup_data = querystring.parse(paramsString);
 
   // Check parameters
   if (!net.isIP(wakeup_data.ip) ||     // Is a valid IP address
@@ -38,7 +35,7 @@ function router_wakeupV1(parsedURL, request, response, cb) {
       wakeup_data.port <= 0 || wakeup_data.port > 65535 // Port in a valid range
   ) {
     log.debug('WU_ListenerHTTP_WakeUpRouter --> Bad IP/Port');
-    response.statusCode = 404;
+    response.statusCode = 400;
     response.write('Bad parameters. Bad IP/Port');
     return;
   }
@@ -48,7 +45,7 @@ function router_wakeupV1(parsedURL, request, response, cb) {
        (!wakeup_data.mcc || !wakeup_data.mnc ||
         isNaN(wakeup_data.mcc) || isNaN(wakeup_data.mnc))) {
     log.debug('WU_ListenerHTTP_WakeUpRouter --> Bad NetID OR MCC/MNC');
-    response.statusCode = 404;
+    response.statusCode = 400;
     response.write('Bad parameters. Bad NetID OR MCC/MNC');
     return;
   }
@@ -64,4 +61,22 @@ function router_wakeupV1(parsedURL, request, response, cb) {
   process.nextTick(function() {
     cb(wakeup_data);
   });
-};
+}
+
+module.exports.entrypoint =
+  function router_wakeupV1(parsedURL, body, request, response, cb) {
+    switch (request.method) {
+    case 'GET':
+      processWakeUpQuery(parsedURL.query, request, response, cb);
+      break;
+    case 'POST':
+      processWakeUpQuery(body, request, response, cb);
+      break;
+    default:
+      response.setHeader('Content-Type', 'text/plain');
+      response.statusCode = 405;
+      response.write('Bad method. Only GET and POST are allowed');
+      log.debug('WU_ListenerHTTP_WakeUpRouter --> Bad method - ' +
+        request.method);
+    }
+  };
