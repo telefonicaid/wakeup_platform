@@ -68,7 +68,7 @@ module.exports.entrypoint =
     if (request.method !== 'POST') {
       response.setHeader('Content-Type', 'text/plain');
       response.statusCode = 405;
-      response.write('Bad method. Only GET and POST are allowed');
+      response.write('Bad method. Only POST is allowed');
       log.debug('WU_ListenerHTTP_WakeUpRouter --> Bad method - ' +
         request.method);
     } else {
