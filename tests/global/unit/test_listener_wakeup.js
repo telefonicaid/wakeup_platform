@@ -13,12 +13,20 @@ var assert = require('assert'),
 vows.describe('Global node WakeUp tests').addBatch({
   'Bad query': {
     topic: function send_wakeup_bad_parameters() {
-      request('http://localhost:8000/wakeup/v1?ip=127.0.0.1&port=1234',
-        this.callback);
+      var self = this;
+      var body = 'ip=127.0.0.1&port=1234';
+      var url = 'http://localhost:8000/wakeup/v1';
+      request.post(url, { body: body }, function(error, response, body) {
+        if (error) {
+          self.callback(error.toString());
+          return;
+        }
+        self.callback(error, response, body);
+      });
     },
 
     'Check status code': function(err, res, body) {
-      assert.equal(res.statusCode, 404);
+      assert.equal(res.statusCode, 400);
     },
     'Received data has the expected format': function(err, res, body) {
       assert.isString(body);
@@ -28,9 +36,16 @@ vows.describe('Global node WakeUp tests').addBatch({
 
   'With Network ID': {
     topic: function send_wakeup_networkID() {
-      var r = 'http://localhost:8000/wakeup/v1?' +
-              'ip=127.0.0.1&port=1234&netid=network2-1-1';
-      request(r, this.callback);
+      var self = this;
+      var body = 'ip=127.0.0.1&port=1234&netid=network2-1-1';
+      var url = 'http://localhost:8000/wakeup/v1';
+      request.post(url, { body: body }, function(error, response, body) {
+        if (error) {
+          self.callback(error.toString());
+          return;
+        }
+        self.callback(error, response, body);
+      });
     },
 
     'Check status code': function(err, res, body) {
@@ -44,9 +59,16 @@ vows.describe('Global node WakeUp tests').addBatch({
 
   'With MCC/MNC': {
     topic: function send_wakeup_MCCMNC() {
-      var r = 'http://localhost:8000/wakeup/v1?' +
-              'ip=127.0.0.1&port=1234&mcc=214&mnc=07';
-      request(r, this.callback);
+      var self = this;
+      var body = 'ip=127.0.0.1&port=1234&mcc=214&mnc=07';
+      var url = 'http://localhost:8000/wakeup/v1';
+      request.post(url, { body: body }, function(error, response, body) {
+        if (error) {
+          self.callback(error.toString());
+          return;
+        }
+        self.callback(error, response, body);
+      });
     },
 
     'Check status code': function(err, res, body) {
