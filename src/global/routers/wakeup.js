@@ -65,18 +65,13 @@ function processWakeUpQuery(paramsString, request, response, cb) {
 
 module.exports.entrypoint =
   function router_wakeupV1(parsedURL, body, request, response, cb) {
-    switch (request.method) {
-    case 'GET':
-      processWakeUpQuery(parsedURL.query, request, response, cb);
-      break;
-    case 'POST':
-      processWakeUpQuery(body, request, response, cb);
-      break;
-    default:
+    if (request.method !== 'POST') {
       response.setHeader('Content-Type', 'text/plain');
       response.statusCode = 405;
       response.write('Bad method. Only GET and POST are allowed');
       log.debug('WU_ListenerHTTP_WakeUpRouter --> Bad method - ' +
         request.method);
+    } else {
+      processWakeUpQuery(body, request, response, cb);
     }
   };
