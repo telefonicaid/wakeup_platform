@@ -7,7 +7,7 @@
  */
 
 require('./configuration.js');
-var mn = require('../../../src/global/shared_libs/mobile_networks'),
+var mn = require('../../../src/global/libs/mobile_networks'),
     assert = require('assert'),
     vows = require('vows'),
     net = require('net');
