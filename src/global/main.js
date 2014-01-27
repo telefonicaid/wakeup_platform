@@ -30,7 +30,16 @@ WU_Global_Server.prototype = {
         URL += '&proto=' + wakeupdata.proto;
       }
       log.info('Sending wakeup query to: ' + URL);
-      request(URL, function(error, resp, body) {
+
+      request({
+        url: URL,
+        headers: {
+          'x-real-ip': wakeupdata.headers['x-real-ip'],
+          'x-forwarded-for': wakeupdata.headers['x-forwarded-for'],
+          'x-client-cert-dn': wakeupdata.headers['x-client-cert-dn'],
+          'x-client-cert-verified': wakeupdata.headers['x-client-cert-verified']
+        }
+      }, function(error, resp, body) {
         if (error) {
           log.error('Local node connection error: ' + error);
         }

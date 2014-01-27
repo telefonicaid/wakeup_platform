@@ -58,6 +58,10 @@ function processWakeUpQuery(paramsString, request, response, cb) {
 
   response.statusCode = 200;
   response.write('Accepted');
+
+  // Append client information stored in request HEADERS
+  wakeup_data.headers = request.headers;
+
   process.nextTick(function() {
     cb(wakeup_data);
   });
