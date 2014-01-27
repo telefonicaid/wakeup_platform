@@ -57,7 +57,9 @@ BEGIN {
   }
 
   if(complete_line == 1) {
-    redis("hset operators '" mccmnc "' \"{ country: '" country "', operator: '" operator "', mccmnc: '" mccmnc "' }\"")
+    sub("'", "`", operator);
+    sub("'", "`", country);
+    redis("hset operators '" mccmnc "' '{ \"country\": \"" country "\", \"operator\": \"" operator "\", \"mccmnc\": \"" mccmnc "\" }'")
     complete_line = 0
     operators_count++
     if(debug_enabled == 0 && execute_redis == 1) {
