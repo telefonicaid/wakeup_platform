@@ -33,6 +33,7 @@ WU_Global_Server.prototype = {
       request(URL, function(error, resp, body) {
         if (error) {
           log.error('Local node connection error: ' + error);
+          return;
         }
         log.info('Notification delivered to local node ! - Response: (' +
           resp.statusCode + ') # ' + body);
