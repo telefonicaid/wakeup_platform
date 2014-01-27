@@ -5,3 +5,4 @@ src/global/shared_libs/
 version.info
 shared_*.js
 output
+src/utils/test_ca/TEST_CERTIFICATES

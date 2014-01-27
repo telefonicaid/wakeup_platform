@@ -54,8 +54,20 @@ ListenerHttp.prototype = {
   // HTTP callbacks
   //////////////////////////////////////////////
   onHTTPMessage: function(request, response) {
+    log.debug('onHTTPMessage: Received Headers: ', request.headers);
+
     var msg = '';
-    log.info('New message from ' + request.url);
+    if (request.headers['x-client-cert-verified'] !== 'SUCCESS') {
+      log.error('Received certificate not accepted by SSL terminator !');
+      response.setHeader('Content-Type', 'text/plain');
+      response.statusCode = 400;
+      response.write('Client certificate not accepted');
+      response.end();
+      return;
+    }
+    log.info('New message to ' + request.url + ' from ' +
+      request.headers['x-client-cert-dn']);
+
     var _url = url.parse(request.url);
 
     // Check router existance
@@ -71,7 +83,7 @@ ListenerHttp.prototype = {
         response.end();
       });
     } else {
-      response.setHeader('Content-Type', 'text/html');
+      response.setHeader('Content-Type', 'text/plain');
       response.statusCode = 404;
       response.write('Not found');
       log.warn('Bad query ' + request.url + ', router not found');
