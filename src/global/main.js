@@ -9,7 +9,7 @@
 var config = require('./shared_libs/configuration'),
     log = require('./shared_libs/logger'),
     plugins_loader = require('./shared_libs/plugins_loader'),
-    mn = require('./shared_libs/mobile_networks'),
+    mn = require('./libs/mobile_networks'),
     request = require('request');
     ListenerHttp = require('./shared_libs/listener_http').ListenerHttp;
 
