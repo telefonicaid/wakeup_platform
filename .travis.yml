@@ -7,12 +7,19 @@ services:
   - redis-server
 
 install:
+  - cd global
+  - make clean
+  - make build
+  - cd ../local
   - make clean
   - make build
 
 script:
   - make tests
+  - cd ../global
+  - make tests
 
 notifications:
    email:
       - frsela@tid.es
+      - gll@tid.es
