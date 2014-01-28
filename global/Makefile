@@ -12,17 +12,18 @@ GJSLINT ?= gjslint
 FIXJSSTYLE ?= fixjsstyle
 
 .PHONY = about dev all version.info
-.PHONY = clean clean_local
-.PHONY = build build_local
+.PHONY = clean clean_global
+.PHONY = build build_global
 .PHONY = install tests
 
+all: dev install
+
 about:
-	@echo "Telefonica R&D WakeUp platform, (c) 2013"
+	@echo "Telefonica R&D WakeUp platform, (c) 2014"
 	@echo " use make dev to build development environment"
 	@echo " use make all to build development environment and final builds"
 
 dev: clean check_style build tests
-all: dev install
 
 version.info:
 	@echo "Getting version information from GIT ..."
@@ -93,6 +94,6 @@ tests_global:
 	@echo "Killing global server ..."
 	@kill -9 `cat global.pid`; rm global.pid
 
-cyclomatic_complexity: tests_pre
+cyclomatic_complexity: tests
 	@echo "Calculating cyclomatic complexity"
 	@tests/node_modules/.bin/cr src/

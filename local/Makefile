@@ -16,13 +16,14 @@ FIXJSSTYLE ?= fixjsstyle
 .PHONY = build build_local
 .PHONY = install tests
 
+all: dev install
+
 about:
-	@echo "Telefonica R&D WakeUp platform, (c) 2013"
+	@echo "Telefonica R&D WakeUp platform, (c) 2014"
 	@echo " use make dev to build development environment"
 	@echo " use make all to build development environment and final builds"
 
 dev: clean check_style build tests
-all: dev install
 
 version.info:
 	@echo "Getting version information from GIT ..."
@@ -87,6 +88,6 @@ tests_local:
 	@echo "Killing local server ..."
 	@kill -9 `cat local.pid`; rm local.pid
 
-cyclomatic_complexity: tests_pre
+cyclomatic_complexity: tests
 	@echo "Calculating cyclomatic complexity"
 	@tests/node_modules/.bin/cr src/
