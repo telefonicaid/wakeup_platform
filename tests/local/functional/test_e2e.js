@@ -25,8 +25,16 @@ vows.describe('Local node E2E tests').addBatch({
       }, serverTimeoutGracePeriod);
       // Listen on a random PORT
       mock_tcpserver(0, this.callback, function onMockServerStarted(port) {
-        request('http://localhost:9000/wakeup?proto=tcp&ip=127.0.0.1&port=' +
-          port);
+        request({
+          url: 'http://localhost:9000/wakeup?proto=tcp&ip=127.0.0.1&port=' +
+                port,
+          headers: {
+            'x-real-ip': '127.0.0.1',
+            'x-forwarded-for': '127.0.0.1',
+            'x-client-cert-dn': 'DN=Testing',
+            'x-client-cert-verified': 'SUCCESS'
+          }
+        });
       });
     },
 
@@ -50,7 +58,15 @@ vows.describe('Local node E2E tests').addBatch({
       }, serverTimeoutGracePeriod);
       // Listen on a random PORT
       mock_udpserver(0, this.callback, function onMockServerStarted(port) {
-        request('http://localhost:9000/wakeup?ip=127.0.0.1&port=' + port);
+        request({
+          url: 'http://localhost:9000/wakeup?ip=127.0.0.1&port=' + port,
+          headers: {
+            'x-real-ip': '127.0.0.1',
+            'x-forwarded-for': '127.0.0.1',
+            'x-client-cert-dn': 'DN=Testing',
+            'x-client-cert-verified': 'SUCCESS'
+          }
+        });
       });
     },
 
@@ -76,7 +92,15 @@ vows.describe('Local node E2E tests').addBatch({
       mock_tcpserver(0, this.callback, function onMockServerStarted(port) {
         var body = 'proto=tcp&ip=127.0.0.1&port=' + port;
         var url = 'http://localhost:9000/wakeup';
-        request.post(url, { body: body }, function(error, response, body) {
+        request.post(url, {
+          body: body,
+          headers: {
+            'x-real-ip': '127.0.0.1',
+            'x-forwarded-for': '127.0.0.1',
+            'x-client-cert-dn': 'DN=Testing',
+            'x-client-cert-verified': 'SUCCESS'
+          }
+        }, function(error, response, body) {
           if (error) {
             self.callback(error.toString());
             return;
@@ -111,7 +135,15 @@ vows.describe('Local node E2E tests').addBatch({
       mock_udpserver(0, this.callback, function onMockServerStarted(port) {
         var body = 'ip=127.0.0.1&port=' + port;
         var url = 'http://localhost:9000/wakeup';
-        request.post(url, { body: body }, function(error, response, body) {
+        request.post(url, {
+          body: body,
+          headers: {
+            'x-real-ip': '127.0.0.1',
+            'x-forwarded-for': '127.0.0.1',
+            'x-client-cert-dn': 'DN=Testing',
+            'x-client-cert-verified': 'SUCCESS'
+          }
+        }, function(error, response, body) {
           if (error) {
             self.callback(error.toString());
             return;
