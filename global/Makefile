@@ -31,60 +31,42 @@ version.info:
 
 provision_data:
 	@echo "Provisioning operators data on REDIS database ..."
-	@cd src/utils; ./wakeup_provisionnetworks
+	@cd utils; ./wakeup_provisionnetworks
 	@echo "Done!"
 
-clean: clean_local clean_global clean_tests
-	@echo "Cleaning (global) ..."
-	@rm -f src/version.info
-	@rm -rf output
-	@find . -name "*log" -exec rm -f {} \;
-
-clean_local:
-	@echo "Cleaning local server instance ..."
-	@rm -rf src/local/node_modules
-	@rm -rf src/local/shared_libs
-	@rm -f src/local/routers/shared*
-	@rm -f src/local/version.info
+clean: clean_global clean_tests
+	@echo "Cleaning ..."
 
 clean_global:
 	@echo "Cleaning global server instance ..."
-	@rm -rf src/global/node_modules
-	@rm -rf src/global/shared_libs
-	@rm -f src/global/routers/shared*
-	@rm -f src/global/version.info
+	@rm -f src/version.info
+	@rm -rf src/node_modules
+	@rm -rf src/shared_libs
+	@rm -f src/routers/shared*
+	@rm -rf output
+	@find . -name "*log" -exec rm -f {} \;
 
 clean_tests:
 	@echo "Cleaning tests auxiliar files ..."
 	@rm -rf tests/node_modules
 
-build: version.info build_local build_global
-	@echo "Building (global) ..."
-
-build_local: version.info
-	@echo "Building local server instance ..."
-	@cp -rfl src/common/libs src/local/shared_libs
-	@cd src/common/routers/; for r in `ls *js`; do ln -f $$r ../../local/routers/shared_$$r; done;
-	@echo " - Updating dependencies (please, wait ...)"
-	@cd src/local; $(NPM) install > /dev/null 2> /dev/null
-	@ln -f src/version.info src/local/version.info
+build: version.info build_global
+	@echo "Building ..."
 
 build_global: version.info
 	@echo "Building global server instance ..."
-	@cp -rfl src/common/libs src/global/shared_libs
-	@cd src/common/routers/; for r in `ls *js`; do ln -f $$r ../../global/routers/shared_$$r; done;
+	@cp -rfl common/libs src/shared_libs
+	@cd common/routers/; for r in `ls *js`; do ln -f $$r ../../src/routers/shared_$$r; done;
 	@echo " - Updating dependencies (please, wait ...)"
-	@cd src/global; $(NPM) install > /dev/null 2> /dev/null
-	@ln -f src/version.info src/global/version.info
+	@cd src; $(NPM) install > /dev/null 2> /dev/null
 
 install: build
-	@echo "Putting local server into output directory ..."
-	@mkdir -p output/local
-	@cp -rfl src/local output/
-	@mkdir -p output/global
-	@cp -rfl src/global output/
+	@echo "Putting global server into output directory ..."
+	@mkdir -p output
+	@cp -rfl src/* output/
 	@find output -name README.md -exec rm {} \;
-	@cp -rfl src/run_* output/
+	@echo "node start.js $1" > output/run_global.sh
+	@chmod +x output/run_global.sh
 
 check_style:
 	@echo "Checking code style rules ..."
@@ -96,27 +78,18 @@ fix_style:
 	@$(FIXJSSTYLE) --disable 210,217,220,225 -r src -e node_modules
 	@$(FIXJSSTYLE) --disable 210,217,220,225 -r tests -e node_modules
 
-tests: build tests_pre tests_local tests_global
-	@echo "Executing common unit tests ..."
-	@cd tests; $(NPM) run-script test_libs
+tests: build tests_global
+	@echo "Executing tests ..."
 
-tests_pre:
+tests_global:
 	@echo "Preparing tests environment (please wait ...)"
 	@cd tests; $(NPM) install > /dev/null 2> /dev/null
-
-tests_local: tests_pre
-	@echo "Launching local server ..."
-	@cd src/local; node start.js > /dev/null & echo "$$!" > ../../local.pid
-	@echo "Executing unit tests ..."
-	@cd tests; $(NPM) run-script test_local
-	@echo "Killing local server ..."
-	@kill -9 `cat local.pid`; rm local.pid
-
-tests_global: tests_pre
+	@echo "Executing libs unit tests ..."
+	@cd tests; $(NPM) run-script test_libs
 	@echo "Launching global server ..."
-	@cd src/global; node start.js > /dev/null & echo "$$!" > ../../global.pid
+	@cd src; node start.js > /dev/null & echo "$$!" > ../global.pid
 	@echo "Executing unit tests ..."
-	@cd tests; $(NPM) run-script test_global
+	@cd tests; $(NPM) run-script test
 	@echo "Killing global server ..."
 	@kill -9 `cat global.pid`; rm global.pid
 

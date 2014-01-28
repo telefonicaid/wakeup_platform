@@ -6,4 +6,4 @@
  * Fernando Rodríguez Sela <frsela@tid.es>
  */
 
-process.configuration = require('../../../src/global/config.default.json');
+process.configuration = require('../../../src/config.default.json');
