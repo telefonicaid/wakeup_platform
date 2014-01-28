@@ -14,21 +14,16 @@ Finally this starts as a split of the notification-server project (wakeup and pu
 
 ## Code organization
 
-This is a meta repository which depends in these other ones:
+The repository is organized with the following folders:
 
 ```
-wakeup_platform
-  |
-  |- wakeup_platform_global
-  |    |
-  |    \- wakeup_platform_common
-  |
-  |- wakeup_platform_local
-  |    |
-  |    \- wakeup_platform_common
-  |
-  \- wakeup_platform_documentation
-
+/ -> General folder (README, LICENSE, Makefile, ...)
+/src -> Source code
+/src/local -> Local wakeup node source code (the one installed into the mobile network)
+/src/global -> Global wakeup server source code (the one which will act as a frontend for third parties and also send the wakeup orders to local nodes
+/doc -> Manual (Doxygen source code)
+/test -> Unit testing, Integration testing ...
+/packages -> For Linux distributions (Debian, CentOS, RedHat,...) package templates
 ```
 
 ## Standarization
@@ -37,4 +32,19 @@ We're also working in the standarization of this protocol.
 
 ## Build
 
-Per submodules (local & global)
+Use:
+
+```
+make dev
+```
+To update libraries and node dependencies on each server
+
+```
+make all
+```
+To also create an output folder with final versions (ready for deployment) of your server.
+
+```
+make clean
+```
+To clean your working sandbox with temporal folders and files

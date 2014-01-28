@@ -1,2 +1,0 @@
-cd global
-node start.js $1

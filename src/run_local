@@ -1,2 +1,0 @@
-cd local
-node start.js $1 

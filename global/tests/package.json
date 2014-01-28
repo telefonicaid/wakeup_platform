@@ -1,0 +1,45 @@
+{
+  "name": "wakeup_local",
+  "version": "0.0.1",
+  "author": "Telefónica I+D. 2013",
+  "description": "WakeUp platform: Local server",
+  "contributors": [
+    {
+      "name": "Fernando Rodriguez Sela",
+      "email": "frsela@tid.es"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/telefonicaid/wakeup_platform"
+  },
+  "bugs": {
+    "url": "https://github.com/telefonicaid/wakeup_platform/issues"
+  },
+  "keywords": [
+    "wakeup",
+    "udp",
+    "push"
+  ],
+  "devDependencies": {
+    "vows": "0.7.x",
+    "request": "2.27.x",
+    "complexity-report": "1.0.x",
+    "async": "0.2.x",
+    "redis": "0.9.x"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "license": {
+    "type": "GNU Affero General Public License",
+    "url": "http://www.gnu.org/licenses/agpl-3.0.html"
+  },
+  "scripts": {
+    "test": "npm run-script test_libs ; npm run-script test_unit ; npm run-script test_functional",
+    "test_libs": "./libs/unit/pre_tests.js ; ./node_modules/.bin/vows libs/unit/test_*.js -i --spec ; ./libs/unit/post_tests.js",
+    "test_unit": "./node_modules/.bin/vows unit/test_*.js -i --spec",
+    "test_functional": "./node_modules/.bin/vows functional/test_*.js -i --spec",
+    "start": "cd ../; ./run_global &"
+  }
+}
