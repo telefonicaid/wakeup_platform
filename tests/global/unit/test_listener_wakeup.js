@@ -16,7 +16,15 @@ vows.describe('Global node WakeUp tests').addBatch({
       var self = this;
       var body = 'ip=127.0.0.1&port=1234';
       var url = 'http://localhost:8000/wakeup/v1';
-      request.post(url, { body: body }, function(error, response, body) {
+      request.post(url, {
+        body: body,
+        headers: {
+          'x-real-ip': '127.0.0.1',
+          'x-forwarded-for': '127.0.0.1',
+          'x-client-cert-dn': 'DN=Testing',
+          'x-client-cert-verified': 'SUCCESS'
+        }
+      }, function(error, response, body) {
         if (error) {
           self.callback(error.toString());
           return;
@@ -39,7 +47,15 @@ vows.describe('Global node WakeUp tests').addBatch({
       var self = this;
       var body = 'ip=127.0.0.1&port=1234&netid=network2-1-1';
       var url = 'http://localhost:8000/wakeup/v1';
-      request.post(url, { body: body }, function(error, response, body) {
+      request.post(url, {
+        body: body,
+        headers: {
+          'x-real-ip': '127.0.0.1',
+          'x-forwarded-for': '127.0.0.1',
+          'x-client-cert-dn': 'DN=Testing',
+          'x-client-cert-verified': 'SUCCESS'
+        }
+      }, function(error, response, body) {
         if (error) {
           self.callback(error.toString());
           return;
@@ -62,7 +78,15 @@ vows.describe('Global node WakeUp tests').addBatch({
       var self = this;
       var body = 'ip=127.0.0.1&port=1234&mcc=214&mnc=07';
       var url = 'http://localhost:8000/wakeup/v1';
-      request.post(url, { body: body }, function(error, response, body) {
+      request.post(url, {
+        body: body,
+        headers: {
+          'x-real-ip': '127.0.0.1',
+          'x-forwarded-for': '127.0.0.1',
+          'x-client-cert-dn': 'DN=Testing',
+          'x-client-cert-verified': 'SUCCESS'
+        }
+      }, function(error, response, body) {
         if (error) {
           self.callback(error.toString());
           return;
