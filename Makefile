@@ -1,4 +1,4 @@
-all:
+all: sync_submodules
 	@echo "Building all dependencies"
 	@for a in $$(ls); do \
 		if [ -d $$a ]; then \
@@ -17,3 +17,8 @@ clean:
 		fi; \
 	done;
 	@echo "Done!"
+
+sync_submodules:
+	@echo "Syncing submodules in recursive mode ..."
+	@git submodule update --init --recursive
+
