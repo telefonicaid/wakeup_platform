@@ -1,3 +1,0 @@
-make build
-cd src
-node start.js $1 

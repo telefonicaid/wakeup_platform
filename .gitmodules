@@ -1,3 +1,9 @@
 [submodule "doc"]
 	path = doc
 	url = https://github.com/telefonicaid/wakeup_platform_documentation.git
+[submodule "local"]
+	path = local
+	url = https://github.com/telefonicaid/wakeup_platform_local.git
+[submodule "global"]
+	path = global
+	url = https://github.com/telefonicaid/wakeup_platform_global.git
