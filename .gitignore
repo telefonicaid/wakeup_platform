@@ -1,8 +1,2 @@
 *.log
-node_modules
-src/local/shared_libs/
-src/global/shared_libs/
-version.info
-shared_*.js
-output
-src/utils/test_ca/TEST_CERTIFICATES
+utils/test_ca/TEST_CERTIFICATES/
