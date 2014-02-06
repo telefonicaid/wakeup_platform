@@ -5,9 +5,5 @@
 # Fernando Rodríguez Sela <frsela@tid.es>             #
 #######################################################
 
-.PHONY = provision_data
-
-provision_data:
-	@echo "Provisioning operators data on REDIS database ..."
-	@./wakeup_provisionnetworks
-	@echo "Done!"
+dummy:
+	@echo "nothing to do in this folder"
